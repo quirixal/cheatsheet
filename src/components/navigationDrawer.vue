@@ -18,8 +18,10 @@
 </template>
 
 <script setup>
-import { computed, onMounted, reactive } from "vue";
+import { computed, onMounted, reactive, inject } from "vue";
 import axios from "../axios.js";
+
+const config = inject('config')
 
 const emit = defineEmits(['renderDocFile'])
 let states = reactive({
@@ -39,7 +41,8 @@ function closeNavigation() {
 
 async function getAndRenderDocsLinks() {
     states.navigation = [];
-    const directories = (await axios.get("https://api.github.com/repos/patrickmaul/cheatsheet/contents/src/docs?ref=production")).data;
+    const branch = config.development ? config.branch : "production";
+    const directories = (await axios.get(`/cheatsheet/contents/src/docs?ref=${branch}`)).data;
 
     for (const directory of directories) {
         let links = {
@@ -49,7 +52,7 @@ async function getAndRenderDocsLinks() {
         links.title = formatTitle(directory.name);
 
         const innerDirectory = (
-            await axios.get(`https://api.github.com/repos/patrickmaul/cheatsheet/contents/${directory.path}?ref=production`)
+            await axios.get(`/cheatsheet/contents/${directory.path}?ref=${branch}`)
         ).data;
         for (const file of innerDirectory) {
             let link = {};
