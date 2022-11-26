@@ -13,9 +13,9 @@ async function renderMarkdownFile(path = null) {
     const md = new MarkdownIt();
     let data;
     if (!path) {
-        data = (await axios.get("https://api.github.com/repos/patrickmaul/cheatsheet/readme")).data;
+        data = (await axios.get("https://api.github.com/repos/patrickmaul/cheatsheet/readme?ref=production")).data;
     } else {
-        data = (await axios.get(`https://api.github.com/repos/patrickmaul/cheatsheet/contents/${path}`)).data;
+        data = (await axios.get(`https://api.github.com/repos/patrickmaul/cheatsheet/contents/${path}?ref=production`)).data;
     }
     document.querySelector("main#content").innerHTML = md.render(atob(data.content));
 }

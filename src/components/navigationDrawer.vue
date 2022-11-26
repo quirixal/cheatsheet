@@ -28,7 +28,7 @@ function toggleNavigation() {
 
 async function getAndRenderDocsLinks() {
     states.navigation = [];
-    const directories = (await axios.get("https://api.github.com/repos/patrickmaul/cheatsheet/contents/src/docs")).data;
+    const directories = (await axios.get("https://api.github.com/repos/patrickmaul/cheatsheet/contents/src/docs?ref=production")).data;
 
     for (const directory of directories) {
         let links = {
@@ -38,7 +38,7 @@ async function getAndRenderDocsLinks() {
         links.title = formatTitle(directory.name);
 
         const innerDirectory = (
-            await axios.get(`https://api.github.com/repos/patrickmaul/cheatsheet/contents/${directory.path}`)
+            await axios.get(`https://api.github.com/repos/patrickmaul/cheatsheet/contents/${directory.path}?ref=production`)
         ).data;
         for (const file of innerDirectory) {
             let link = {};
