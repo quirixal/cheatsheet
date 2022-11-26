@@ -1,0 +1,20 @@
+// Global
+$app-padding: 8px;
+$app-border-radius: 3px;
+$app-border-width: 1px;
+
+// Navigation drawer
+$navigation-drawer-inner-width-inactive: 42px;
+$navigation-drawer-inner-padding: $app-padding;
+$navigation-drawer-inner-border-width: 2px;
+
+$navigation-drawer-background-color: #af00f5;
+$navigation-drawer-padding: $app-padding;
+$navigation-drawer-border-width: 2px;
+$navigation-drawer-width-inactive: $navigation-drawer-inner-width-inactive + $navigation-drawer-inner-border-width + $navigation-drawer-inner-padding * 2;
+
+// Collapse btn
+$collapse-btn-border: 2px;
+$collapse-btn-border-radius: 1.5rem;
+$collapse-btn-background-color: #8B00C2;
+$collapse-btn-border-color: #540075;
