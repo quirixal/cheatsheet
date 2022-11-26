@@ -1,13 +1,9 @@
 <template lang="pug">
-header
-    h1 Cheatsheet
-
-main
-    TheWelcome
+navigationDrawer
 </template>
 
 <script setup>
-//
+import navigationDrawer from "./components/navigationDrawer.vue";
 </script>
 
 <style lang="scss" scoped>
