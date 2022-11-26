@@ -16,7 +16,7 @@ import { computed, onMounted, reactive } from "vue";
 import axios from "../axios.js";
 
 let states = reactive({
-    active: true,
+    active: false,
     navigation: null,
 });
 const activeClass = computed(() => {
@@ -67,11 +67,14 @@ onMounted(async () => {
 
 <style lang="scss" scoped>
 #navigation-drawer {
-    position: relative;
-    height: 100vh;
-    max-height: 100vh;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 10;
     width: 80px;
     max-width: 80px;
+
     .inner-wrapper {
         position: absolute;
         top: 0;
@@ -83,6 +86,8 @@ onMounted(async () => {
         padding: 8px;
         display: flex;
         flex-direction: column;
+
+        background-color: #888888;
     }
 
     &.active {

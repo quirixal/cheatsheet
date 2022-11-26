@@ -1,5 +1,5 @@
 <template lang="pug">
-navigationDrawer
+navigation-drawer
 main#content
 </template>
 
@@ -24,5 +24,8 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-//
+#content {
+    padding: 8px;
+    padding-left: 81px + 8px;
+}
 </style>
