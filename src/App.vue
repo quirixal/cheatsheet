@@ -29,7 +29,7 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 #content {
-    padding: 8px;
-    padding-left: 81px + 8px;
+    padding: $app-padding;
+    padding-left: $navigation-drawer-width-inactive + $app-padding;
 }
 </style>
