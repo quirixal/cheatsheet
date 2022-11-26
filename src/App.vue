@@ -1,5 +1,5 @@
 <template lang="pug">
-navigation-drawer
+navigation-drawer(@render-doc-file="renderMarkdownFile($event)")
 main#content
 </template>
 
@@ -9,16 +9,20 @@ import MarkdownIt from "markdown-it";
 import { onMounted } from "vue";
 import axios from "./axios.js";
 
-async function renderReadme() {
-    const data = (await axios.get("https://api.github.com/repos/patrickmaul/cheatsheet/readme")).data;
-
+async function renderMarkdownFile(path = null) {
     const md = new MarkdownIt();
+    let data;
+    if (!path) {
+        data = (await axios.get("https://api.github.com/repos/patrickmaul/cheatsheet/readme")).data;
+    } else {
+        data = (await axios.get(`https://api.github.com/repos/patrickmaul/cheatsheet/contents/${path}`)).data;
+    }
     document.querySelector("main#content").innerHTML = md.render(atob(data.content));
 }
 
 onMounted(() => {
     document.addEventListener('DOMContentLoaded', () => {
-        renderReadme();
+        renderMarkdownFile();
     });
 });
 </script>

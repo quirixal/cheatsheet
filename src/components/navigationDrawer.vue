@@ -1,13 +1,13 @@
 <template lang="pug">
 #navigation-drawer(:class="activeClass")
-    .inner-wrapper
+    .inner-wrapper(v-if="states.navigation && states.navigation.length >= 1")
         span.nav-title Cheatsheet
         input(v-if="states.active", type="text", name="search")
-        nav.link-section-wrapper(v-if="states.navigation")
+        nav.link-section-wrapper
             .link-section(v-for="section in states.navigation")
                 h4.link-section-title {{section.title}}
                 ul.link-section-links(v-if="states.active")
-                    li(v-for="link in section.links") {{link.label}}
+                    li(v-for="link in section.links", @click="$emit('renderDocFile', link.path)") {{link.label}}
         button(@click="toggleNavigation") {{ states.active ? "<<": ">>" }}
 </template>
 
