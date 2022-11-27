@@ -2,5 +2,9 @@ import { createApp } from "vue";
 import App from "./App.vue";
 
 import "./assets/style/app.scss";
+import config from "./config.json";
 
-createApp(App).mount("#app");
+const app = createApp(App);
+app.provide("config", config);
+
+app.mount("#app");

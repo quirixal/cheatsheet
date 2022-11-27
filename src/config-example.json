@@ -1,0 +1,5 @@
+{
+  "development": true,
+  "apiBaseUrl": "https://api.github.com/repos/patrickmaul",
+  "branch": "[YOUR CURRENT BRANCH]"
+}
