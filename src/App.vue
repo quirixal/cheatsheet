@@ -9,7 +9,7 @@ import MarkdownIt from "markdown-it";
 import { onMounted, inject } from "vue";
 import axios from "./axios.js";
 
-const config = inject('config')
+const config = inject("config");
 
 async function renderMarkdownFile(path = null) {
     const md = new MarkdownIt();
@@ -25,7 +25,7 @@ async function renderMarkdownFile(path = null) {
 }
 
 onMounted(() => {
-    document.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener("DOMContentLoaded", () => {
         renderMarkdownFile();
     });
 });
