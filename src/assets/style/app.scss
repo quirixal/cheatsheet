@@ -1,1 +1,30 @@
 @import "variables";
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&family=Roboto:wght@400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined');
+
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+}
+
+// Typography
+#content{
+    h1 {
+      &:after{
+        content: '';
+        display: block;
+        height: $app-border-width;
+        background-color: #000;
+      }
+    }
+
+    pre {
+      border-radius: $app-border-radius;
+      padding: $app-padding;
+      background-color: #cccccc;
+      code {
+        font-size: 12px;
+        font-family: 'Roboto Mono', monospace;
+      }
+    }
+}

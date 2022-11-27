@@ -1,41 +1,10 @@
-# cheatsheet
+# Cheatsheet
+This cheat sheet covers mostly web development (technologies, snippets, and other helpful stuff), Git, Docker, and something hardware related. Some resources are listed and some are described.
 
-This template should help get you started developing with Vue 3 in Vite.
+In addition, the range is constantly being expanded and updated.
 
-## Recommended IDE Setup
+As it is kept for private use only, we ask that you apologize and/or report anything that is invalid or outdated.
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Run Unit Tests with [Vitest](https://vitest.dev/)
-
-```sh
-npm run test:unit
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
+## Changelog
+### 0.1.0 (development version)
+The first very sketchy version with all basic implementations made.
