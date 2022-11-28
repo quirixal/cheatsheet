@@ -5,14 +5,14 @@ main#content
 
 <script setup>
 import navigationDrawer from "./components/navigationDrawer.vue";
-import MarkdownIt from "markdown-it";
+import { markdown } from "./markdownit";
 import { onMounted, inject } from "vue";
 import axios from "./axios.js";
 
 const config = inject("config");
 
 async function renderMarkdownFile() {
-    const md = new MarkdownIt();
+    const md = markdown;
     const branch = config.development ? config.branch : "production";
     const urlQuery = window.location.search.replace("?path=", "");
 
