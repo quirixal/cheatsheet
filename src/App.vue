@@ -34,6 +34,8 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 #content {
+    max-width: 900px;
+    margin: 0 auto;
     padding: $app-padding;
     padding-left: $navigation-drawer-width-inactive + $app-padding;
 }
