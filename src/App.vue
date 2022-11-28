@@ -1,16 +1,26 @@
 <template lang="pug">
-navigation-drawer(@path-updated="renderMarkdownFile()")
+navigation-drawer(@path-updated="renderMarkdownFile()", v-model="states")
 main#content
 </template>
 
 <script setup>
 import navigationDrawer from "./components/navigationDrawer.vue";
 import { markdown } from "./markdownit";
-import { onMounted, inject } from "vue";
+import { onMounted, inject, reactive } from "vue";
 import axios from "./axios.js";
 
-const config = inject("config");
+// Components
+import navigationDrawer from "./components/navigationDrawer.vue";
 
+// Defining config & states
+const config = inject("config");
+const states = reactive({
+    activeNavigation: true,
+    activeSearch: true,
+    searchValue: null,
+});
+
+// Render function
 async function renderMarkdownFile() {
     const md = markdown;
     const branch = config.development ? config.branch : "production";
