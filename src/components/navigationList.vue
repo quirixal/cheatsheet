@@ -3,14 +3,14 @@ nav.link-section-wrapper
     .link-section(v-for="section in states.navigation")
         h4.link-section-title {{section.title}}
         ul.link-section-links
-            li.link(v-for="link in section.links", @click="emitPath(link.path)") {{link.label}}
+            li.link(v-for="link in section.links", @click="setPathInURL(link.path)") {{link.label}}
 </template>
 
 <script setup>
 import { onMounted, reactive, inject } from "vue";
 import axios from "../axios.js";
 
-const emit = defineEmits(["renderDocFile"]);
+const emit = defineEmits(["pathUpdated"]);
 const config = inject("config");
 let states = reactive({
     navigation: null,
@@ -49,8 +49,9 @@ function formatTitle(title) {
     return title;
 }
 
-function emitPath(path) {
-    emit("renderDocFile", path);
+function setPathInURL(path) {
+    window.history.replaceState(null, document.title, `?path=${path}`);
+    emit("pathUpdated");
 }
 
 onMounted(async () => {

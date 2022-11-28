@@ -3,9 +3,9 @@
     .content-wrapper.flex
         p.inactive-msg(v-if="!states.active", @click="openNavigation") Click to open navigation bar
         .inner-wrapper.flex.column(v-else)
-            h2.nav-title(@click="emitPathAndCloseMenu(null)") Cheatsheet
+            h2.nav-title(@click="setPathInURL") Cheatsheet
             //- input.searchbar(type="text", name="search", placeholder="Search...")
-            navigation-list(@render-doc-file="emitPathAndCloseMenu($event)")
+            navigation-list(@path-updated="emit('pathUpdated')")
             .flex-filler
             collapse-button(@close-navigation="closeNavigation")
 </template>
@@ -15,7 +15,7 @@ import { computed, reactive } from "vue";
 import collapseButton from "./collapseButton.vue";
 import navigationList from "./navigationList.vue";
 
-const emit = defineEmits(["renderDocFile"]);
+const emit = defineEmits(["pathUpdated"]);
 let states = reactive({
     active: false,
     navigation: null,
@@ -31,9 +31,9 @@ function closeNavigation() {
     states.active = false;
 }
 
-function emitPathAndCloseMenu(path) {
-    emit("renderDocFile", path);
-    closeNavigation();
+function setPathInURL() {
+    window.history.replaceState(null, document.title, "/");
+    emit("pathUpdated");
 }
 </script>
 
