@@ -1,11 +1,11 @@
 <template lang="pug">
-#navigation-drawer(:class="activeClass")
+#navigation-drawer(:class="activeClass", @click.self="closeNavigation")
     .content-wrapper.flex
         p.inactive-msg(v-if="!states.active", @click="openNavigation") Click to open navigation bar
-        .inner-wrapper.flex.column(v-else)
+        .inner-wrapper.flex.column(v-show="states.active")
             h2.nav-title(@click="setPathInURL") Cheatsheet
             //- input.searchbar(type="text", name="search", placeholder="Search...")
-            navigation-list(@path-updated="emit('pathUpdated')")
+            navigation-list(@path-updated="emitPath")
             .flex-filler
             collapse-button(@close-navigation="closeNavigation")
 </template>
@@ -33,6 +33,12 @@ function closeNavigation() {
 
 function setPathInURL() {
     window.history.replaceState(null, document.title, "/");
+    closeNavigation();
+    emit("pathUpdated");
+}
+
+function emitPath() {
+    closeNavigation();
     emit("pathUpdated");
 }
 </script>
