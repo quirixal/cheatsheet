@@ -71,12 +71,26 @@ function emitPath() {
             letter-spacing: 4px;
             word-spacing: 6px;
             font-size: 2rem;
-            color: $font-color;
             transform-origin: center;
             transform: rotate(-90deg);
             min-width: max-content;
             margin: auto 0;
             cursor: pointer;
+            background: linear-gradient(to right, #ffffffcc 0%, white 5%, #ffffffcc 15%);
+            background-position: 0;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 3s infinite linear;
+            animation-fill-mode: forwards;
+        }
+
+        @keyframes shine {
+            0% {
+                background-position: 0;
+            }
+            100% {
+                background-position: 635px;
+            }
         }
     }
 
