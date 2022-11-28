@@ -65,6 +65,8 @@ function emitPath() {
 
         background-color: $navigation-drawer-inner-background-color;
 
+        transition: all 0.3s ease-in-out;
+
         p.inactive-msg {
             text-transform: uppercase;
             font-weight: 900;
