@@ -1,5 +1,5 @@
 <template lang="pug">
-navigation-drawer(@render-doc-file="renderMarkdownFile($event)")
+navigation-drawer(@path-updated="renderMarkdownFile()")
 main#content
 </template>
 
@@ -11,15 +11,16 @@ import axios from "./axios.js";
 
 const config = inject("config");
 
-async function renderMarkdownFile(path = null) {
+async function renderMarkdownFile() {
     const md = new MarkdownIt();
     const branch = config.development ? config.branch : "production";
+    const urlQuery = window.location.search.replace("?path=", "");
 
     let data;
-    if (!path) {
+    if (!urlQuery) {
         data = (await axios.get(`/cheatsheet/readme?ref=${branch}`)).data;
     } else {
-        data = (await axios.get(`/cheatsheet/contents/${path}?ref=${branch}`)).data;
+        data = (await axios.get(`/cheatsheet/contents/${urlQuery}?ref=${branch}`)).data;
     }
     document.querySelector("main#content").innerHTML = md.render(atob(data.content));
 }
