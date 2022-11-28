@@ -1,9 +1,9 @@
 <template lang="pug">
 #navigation-drawer(:class="activeClass", @click.self="closeNavigation")
     .content-wrapper.flex
-        p.inactive-msg(v-if="!states.active", @click="openNavigation") Click to open navigation bar
+        p.inactive-msg.pointer(v-if="!states.active", @click="openNavigation") Click to open navigation bar
         .inner-wrapper.flex.column(v-show="states.active")
-            h2.nav-title(@click="setPathInURL") Cheatsheet
+            h2.nav-title.pointer(@click="setPathInURL") Cheatsheet
             //- input.searchbar(type="text", name="search", placeholder="Search...")
             navigation-list(@path-updated="emitPath")
             .flex-filler
@@ -65,18 +65,33 @@ function emitPath() {
 
         background-color: $navigation-drawer-inner-background-color;
 
+        transition: all 0.3s ease-in-out;
+
         p.inactive-msg {
             text-transform: uppercase;
             font-weight: 900;
             letter-spacing: 4px;
             word-spacing: 6px;
             font-size: 2rem;
-            color: $font-color;
             transform-origin: center;
             transform: rotate(-90deg);
             min-width: max-content;
             margin: auto 0;
-            cursor: pointer;
+            background: linear-gradient(to right, #ffffffcc 0%, white 5%, #ffffffcc 15%);
+            background-position: 0;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 3s infinite linear;
+            animation-fill-mode: forwards;
+        }
+
+        @keyframes shine {
+            0% {
+                background-position: 0;
+            }
+            100% {
+                background-position: 635px;
+            }
         }
     }
 
@@ -95,7 +110,6 @@ function emitPath() {
                     font-size: 2rem;
                     text-align: center;
                     color: $font-color;
-                    cursor: pointer;
                 }
                 .searchbar {
                     border: none;
