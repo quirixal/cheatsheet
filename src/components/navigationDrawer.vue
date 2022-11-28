@@ -1,9 +1,9 @@
 <template lang="pug">
 #navigation-drawer(:class="activeClass", @click.self="closeNavigation")
     .content-wrapper.flex
-        p.inactive-msg(v-if="!states.active", @click="openNavigation") Click to open navigation bar
+        p.inactive-msg.pointer(v-if="!states.active", @click="openNavigation") Click to open navigation bar
         .inner-wrapper.flex.column(v-show="states.active")
-            h2.nav-title(@click="setPathInURL") Cheatsheet
+            h2.nav-title.pointer(@click="setPathInURL") Cheatsheet
             //- input.searchbar(type="text", name="search", placeholder="Search...")
             navigation-list(@path-updated="emitPath")
             .flex-filler
@@ -75,7 +75,6 @@ function emitPath() {
             transform: rotate(-90deg);
             min-width: max-content;
             margin: auto 0;
-            cursor: pointer;
             background: linear-gradient(to right, #ffffffcc 0%, white 5%, #ffffffcc 15%);
             background-position: 0;
             -webkit-background-clip: text;
@@ -109,7 +108,6 @@ function emitPath() {
                     font-size: 2rem;
                     text-align: center;
                     color: $font-color;
-                    cursor: pointer;
                 }
                 .searchbar {
                     border: none;

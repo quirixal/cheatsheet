@@ -3,7 +3,7 @@ nav.link-section-wrapper
     .link-section(v-for="section in states.navigation")
         h4.link-section-title {{section.title}}
         ul.link-section-links
-            li.link(v-for="link in section.links", @click="setPathInURL(link.path)") {{link.label}}
+            li.link.pointer(v-for="link in section.links", @click="setPathInURL(link.path)") {{link.label}}
 </template>
 
 <script setup>
@@ -69,9 +69,6 @@ onMounted(async () => {
         .link-section-links {
             padding-left: 16px;
             list-style-type: none;
-            .link {
-                cursor: pointer;
-            }
         }
     }
 }

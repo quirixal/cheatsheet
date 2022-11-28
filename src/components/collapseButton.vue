@@ -1,5 +1,5 @@
 <template lang="pug">
-button.collapse-btn.flex(@click="emit('closeNavigation')") 
+button.collapse-btn.flex.pointer(@click="emit('closeNavigation')") 
     span.material-symbols-outlined keyboard_double_arrow_left
     span Collapse navigation
     span.material-symbols-outlined keyboard_double_arrow_left
@@ -24,7 +24,5 @@ button.collapse-btn {
 
     justify-content: space-around;
     align-items: center;
-
-    cursor: pointer;
 }
 </style>
