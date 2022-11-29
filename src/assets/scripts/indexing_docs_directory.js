@@ -48,6 +48,7 @@ fs.writeFileSync("./src/assets/json/indexed_docs_directory.json", JSON.stringify
 
 function formatTitle(title) {
     title = title[0].toUpperCase() + title.substring(1);
+    title = title.replace("_", " ");
 
     if (title.endsWith(".md")) {
         return title.substring(0, title.length - 3);
