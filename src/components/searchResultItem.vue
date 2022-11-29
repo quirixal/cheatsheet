@@ -1,7 +1,7 @@
 <template lang="pug">
 li.result-item.pointer.flex.column(@click="$emit('updatePath', result.path)")
     .result-item-header
-        p.result-item-title {{result.name}}
+        p.result-item-title {{result.title}}
     .result-item-content
         p.result-item-description {{result.description}}
         p.result-item-keywords

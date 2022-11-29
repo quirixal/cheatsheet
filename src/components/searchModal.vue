@@ -30,7 +30,7 @@ const search = computed(() => {
 
     if (props.searchValue) {
         return base.filter((file) => {
-            const filename = file.name.toLowerCase();
+            const filename = file.title.toLowerCase();
             const fileDescription = file.description.toLowerCase();
             const fileKeywords = [...file.keywords];
             const searchValue = props.searchValue.toLowerCase();

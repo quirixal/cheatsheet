@@ -29,13 +29,18 @@ subdirectories.forEach((directory) => {
 function indexingFile(filePath) {
     const fileContents = fs.readFileSync(filePath).toString();
     const fileLines = fileContents.split(/r?\n/);
-    for (const line of fileLines) {
-        if (line.includes("<!--ci")) {
-            let result = JSON.parse(line.replace("<!--ci", "").replace("-->", ""));
-            result.path = filePath.replace("./", "");
-            return result;
-        }
+    let keys = ["title", "description", "keywords"];
+    let result = {};
+
+    for (let i = 0; i < keys.length; i++) {
+        let element = fileLines[i].match(/(?<=\().+(?=\))/);
+        element = element ? element[0] : null;
+        result[keys[i]] = element;
     }
+
+    result.keywords = result.keywords.split(", ");
+
+    return result;
 }
 
 fs.writeFileSync("./src/assets/json/indexed_docs_directory.json", JSON.stringify(indexedDocs));
