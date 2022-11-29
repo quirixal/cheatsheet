@@ -4,7 +4,7 @@
         button.close-btn.pointer(@click="emit('update:active', false)")
             span.material-symbols-outlined close
         h1.card-title Search though cheat sheet
-        input.searchbar(:value="props.searchValue", type="text", name="search", placeholder="Search...", @input="emit('update:searchValue', $event.target.value)", autofocus)
+        input.searchbar(:value="props.searchValue", type="text", name="search", placeholder="Search...", @input="emit('update:searchValue', $event.target.value)")
 
         .results(v-if="props.searchValue")
             hr
@@ -14,7 +14,7 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed, onUpdated } from "vue";
 import indexedDocs from "@/assets/json/indexed_docs_directory.json";
 
 import searchResultItem from "@/components/SearchResultItem.vue";
@@ -51,6 +51,13 @@ function setPathInURL(path) {
     emit("update:active", false);
     emit("closeNavigation");
 }
+
+onUpdated(() => {
+    if (props.active) {
+        const searchbar = document.querySelector("#search-modal .card .searchbar");
+        searchbar.focus();
+    }
+});
 </script>
 
 <style lang="scss" scoped>

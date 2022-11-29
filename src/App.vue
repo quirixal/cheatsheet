@@ -1,5 +1,5 @@
 <template lang="pug">
-navigation-drawer(v-model="states", @path-updated="renderMarkdownFile()")
+navigation-drawer(v-model:activeSearch="states.activeSearch", v-model:activeNavigation="states.activeNavigation", @path-updated="renderMarkdownFile()")
 search-modal(v-model:active="states.activeSearch", v-model:searchValue="states.searchValue", @close-navigation="closeNavigationAndResetSearchValue" @path-updated="renderMarkdownFile()")
 main#content(:class="{'no-scroll':states.activeNavigation}")
 </template>
