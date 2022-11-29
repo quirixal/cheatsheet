@@ -125,6 +125,7 @@ function emitPath() {
                     font-size: 2rem;
                     text-align: center;
                     color: $font-color;
+                    white-space: nowrap;
                 }
             }
         }
