@@ -1,4 +1,4 @@
-# Cheatsheet
+# Cheat sheet
 This cheat sheet covers mostly web development (technologies, snippets, and other helpful stuff), Git, Docker, and something hardware related. Some resources are listed and some are described.
 
 In addition, the range is constantly being expanded and updated.

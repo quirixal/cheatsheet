@@ -4,7 +4,7 @@
         p.inactive-msg.pointer(v-if="!modelValue.activeNavigation", @click="openNavigation") Click to open navigation bar
 
         .inner-wrapper.flex.column(v-show="modelValue.activeNavigation")
-            h2.nav-title.pointer(@click="setPathInURL") Cheatsheet
+            h2.nav-title.pointer(@click="setPathInURL") Cheat sheet
 
             searchbar-input(v-model="modelValue.searchValue", @open-search-modal="openSearch")
 
@@ -84,7 +84,7 @@ function emitPath() {
 
         p.inactive-msg {
             text-transform: uppercase;
-            font-weight: 900;
+            font-weight: 1000;
             letter-spacing: 4px;
             word-spacing: 6px;
             font-size: 2rem;
@@ -92,11 +92,11 @@ function emitPath() {
             transform: rotate(-90deg);
             min-width: max-content;
             margin: auto 0;
-            background: linear-gradient(to right, #ffffffcc 0%, white 5%, #ffffffcc 15%);
+            background: linear-gradient(to right, #ffffffbe 0%, white 5%, #ffffffbe 15%);
             background-position: 0;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: shine 3s infinite linear;
+            animation: shine 4s infinite linear;
             animation-fill-mode: forwards;
         }
 
@@ -105,7 +105,7 @@ function emitPath() {
                 background-position: 0;
             }
             100% {
-                background-position: 635px;
+                background-position: 100vh;
             }
         }
     }
