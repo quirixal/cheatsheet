@@ -33,8 +33,7 @@ async function renderMarkdownFile() {
     } else {
         data = (await axios.get(`/cheatsheet/contents/${urlQuery}?ref=${branch}`)).data;
     }
-    let htmlString = atob(data.content);
-    document.querySelector("main#content").innerHTML = md.render(htmlString.slice(htmlString.lastIndexOf("-->") + 3));
+    document.querySelector("main#content").innerHTML = md.render(atob(data.content));
 }
 
 function closeNavigationAndResetSearchValue() {

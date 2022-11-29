@@ -39,6 +39,7 @@ function indexingFile(filePath) {
     }
 
     result.keywords = result.keywords.split(", ");
+    result.path = filePath.replace("./", "");
 
     return result;
 }
