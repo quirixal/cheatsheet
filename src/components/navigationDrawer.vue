@@ -1,12 +1,12 @@
 <template lang="pug">
-#navigation-drawer(:class="{'active':props.modelValue && props.modelValue.activeNavigation}", @click.self="closeNavigation")
+#navigation-drawer(:class="{'active':props.activeNavigation}", @click.self="closeNavigation")
     .content-wrapper.flex
-        p.inactive-msg.pointer(v-if="!modelValue.activeNavigation", @click="openNavigation") Click to open navigation bar
+        p.inactive-msg.pointer(v-if="!props.activeNavigation", @click="emit('update:activeNavigation', true)") Click to open navigation bar
 
-        .inner-wrapper.flex.column(v-show="modelValue.activeNavigation")
+        .inner-wrapper.flex.column(v-show="props.activeNavigation")
             h2.nav-title.pointer(@click="setPathInURL") Cheat sheet
 
-            searchbar-input(v-model="modelValue.searchValue", @open-search-modal="openSearch")
+            button.open-search-button(@click="emit('update:activeSearch', true)") Open search
 
             navigation-list(@path-updated="emitPath")
             .flex-filler
@@ -22,21 +22,12 @@ import navigationList from "./navigationList.vue";
 import searchbarInput from "./searchbarInput.vue";
 
 // Defining props & emits
-const props = defineProps(["modelValue"]);
-const emit = defineEmits(["pathUpdated", "update:modelValue"]);
+const props = defineProps(["activeNavigation", "activeSearch"]);
+const emit = defineEmits(["pathUpdated", "update:activeNavigation", "update:activeSearch"]);
 
 // Emits
-function openNavigation() {
-    props.modelValue.activeNavigation = true;
-    emit("update:modelValue", props.modelValue);
-}
 function closeNavigation() {
-    props.modelValue.activeNavigation = false;
-    emit("update:modelValue", props.modelValue);
-}
-function openSearch() {
-    props.modelValue.activeSearch = true;
-    emit("update:modelValue", props.modelValue);
+    emit("update:activeNavigation", false);
 }
 function setPathInURL() {
     window.history.replaceState(null, document.title, "/");
@@ -117,6 +108,21 @@ function emitPath() {
                     text-align: center;
                     color: $font-color;
                     white-space: nowrap;
+                }
+
+                .open-search-button {
+                    padding: $app-padding;
+
+                    border: $collapse-btn-border solid $collapse-btn-border-color;
+                    border-radius: $collapse-btn-border-radius;
+
+                    background-color: $collapse-btn-background-color;
+                    color: $font-color;
+
+                    font-size: 16px;
+
+                    justify-content: space-around;
+                    align-items: center;
                 }
             }
         }
