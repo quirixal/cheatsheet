@@ -1,16 +1,16 @@
 <template lang="pug">
-button.collapse-btn.flex.pointer(@click="emit('closeNavigation')") 
-    span.material-symbols-outlined keyboard_double_arrow_left
-    span Collapse navigation
-    span.material-symbols-outlined keyboard_double_arrow_left
+button.primary-button.flex.pointer
+    span.material-symbols-outlined {{ iconLeft }}
+    span {{ label }}
+    span.material-symbols-outlined {{ iconRight }}
 </template>
 
 <script setup>
-const emit = defineEmits(["closeNavigation"]);
+defineProps(["label", "iconLeft", "iconRight"]);
 </script>
 
 <style lang="scss" scoped>
-button.collapse-btn {
+button.primary-button {
     padding: $app-padding;
     min-width: 100%;
 

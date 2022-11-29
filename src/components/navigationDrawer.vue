@@ -4,32 +4,27 @@
         p.inactive-msg.pointer(v-if="!props.activeNavigation", @click="emit('update:activeNavigation', true)") Click to open navigation bar
 
         .inner-wrapper.flex.column(v-show="props.activeNavigation")
-            h2.nav-title.pointer(@click="setPathInURL") Cheat sheet
-
-            button.open-search-button(@click="emit('update:activeSearch', true)") Open search
-
+            h2.nav-title.pointer(@click="resetURLState") Cheat sheet
+            primary-button(label="Open search", icon-left="search", @click="emit('update:activeSearch', true)")
             navigation-list(@path-updated="emitPath")
             .flex-filler
-            collapse-button(@close-navigation="closeNavigation")
+            primary-button(label="Collapse navigation", icon-left="keyboard_double_arrow_left", icon-right="keyboard_double_arrow_left", @click="closeNavigation")
 </template>
 
 <script setup>
-import { computed } from "vue";
-
 // Components
-import collapseButton from "./collapseButton.vue";
 import navigationList from "./navigationList.vue";
-import searchbarInput from "./searchbarInput.vue";
+import primaryButton from "./core/buttons/primaryButton.vue";
 
 // Defining props & emits
 const props = defineProps(["activeNavigation", "activeSearch"]);
 const emit = defineEmits(["pathUpdated", "update:activeNavigation", "update:activeSearch"]);
 
-// Emits
+// Functions
 function closeNavigation() {
     emit("update:activeNavigation", false);
 }
-function setPathInURL() {
+function resetURLState() {
     window.history.replaceState(null, document.title, "/");
     closeNavigation();
     emit("pathUpdated");
