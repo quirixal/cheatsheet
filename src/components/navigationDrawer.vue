@@ -1,5 +1,5 @@
 <template lang="pug">
-#navigation-drawer(:class="activeClass", @click.self="closeNavigation")
+#navigation-drawer(:class="{'active':props.modelValue && props.modelValue.activeNavigation}", @click.self="closeNavigation")
     .content-wrapper.flex
         p.inactive-msg.pointer(v-if="!modelValue.activeNavigation", @click="openNavigation") Click to open navigation bar
 
@@ -24,15 +24,6 @@ import searchbarInput from "./searchbarInput.vue";
 // Defining props & emits
 const props = defineProps(["modelValue"]);
 const emit = defineEmits(["pathUpdated", "update:modelValue"]);
-
-// Computed props
-const activeClass = computed(() => {
-    if (props.modelValue && props.modelValue.activeNavigation) {
-        return "active";
-    } else {
-        return "";
-    }
-});
 
 // Emits
 function openNavigation() {
