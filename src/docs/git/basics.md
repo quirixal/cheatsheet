@@ -1,3 +1,6 @@
+[title]: <> (Git - Basics)
+[description]: <> (The git basic commands and how they work are briefly explained, not really deepened)
+[keywords]: <> (git, basics, push, pull, merge, commit, init, repository)
 # Git - Basics
 ## What is Git?
 Git is a free and open-source, distributed version control system designed to handle anything from small to very large projects quickly and efficiently.

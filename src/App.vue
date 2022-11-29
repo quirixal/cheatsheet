@@ -1,16 +1,27 @@
 <template lang="pug">
-navigation-drawer(@path-updated="renderMarkdownFile()")
+navigation-drawer(v-model="states", @path-updated="renderMarkdownFile()")
+search-modal(v-model:active="states.activeSearch", v-model:searchValue="states.searchValue", @close-navigation="closeNavigationAndResetSearchValue" @path-updated="renderMarkdownFile()")
 main#content
 </template>
 
 <script setup>
-import navigationDrawer from "./components/navigationDrawer.vue";
 import { markdown } from "./markdownit";
-import { onMounted, inject } from "vue";
+import { onMounted, inject, reactive } from "vue";
 import axios from "./axios.js";
 
-const config = inject("config");
+// Components
+import navigationDrawer from "./components/navigationDrawer.vue";
+import searchModal from "./components/searchModal.vue";
 
+// Defining config & states
+const config = inject("config");
+const states = reactive({
+    activeNavigation: false,
+    activeSearch: false,
+    searchValue: null,
+});
+
+// Render function
 async function renderMarkdownFile() {
     const md = markdown;
     const branch = config.development ? config.branch : "production";
@@ -25,6 +36,11 @@ async function renderMarkdownFile() {
     document.querySelector("main#content").innerHTML = md.render(atob(data.content));
 }
 
+function closeNavigationAndResetSearchValue() {
+    states.activeNavigation = !states.activeNavigation;
+    states.searchValue = null;
+}
+
 onMounted(() => {
     document.addEventListener("DOMContentLoaded", () => {
         renderMarkdownFile();
@@ -34,6 +50,8 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 #content {
+    max-width: 900px;
+    margin: 0 auto;
     padding: $app-padding;
     padding-left: $navigation-drawer-width-inactive + $app-padding;
 }

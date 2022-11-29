@@ -1,42 +1,57 @@
 <template lang="pug">
 #navigation-drawer(:class="activeClass", @click.self="closeNavigation")
     .content-wrapper.flex
-        p.inactive-msg(v-if="!states.active", @click="openNavigation") Click to open navigation bar
-        .inner-wrapper.flex.column(v-show="states.active")
-            h2.nav-title(@click="setPathInURL") Cheatsheet
-            //- input.searchbar(type="text", name="search", placeholder="Search...")
+        p.inactive-msg.pointer(v-if="!modelValue.activeNavigation", @click="openNavigation") Click to open navigation bar
+
+        .inner-wrapper.flex.column(v-show="modelValue.activeNavigation")
+            h2.nav-title.pointer(@click="setPathInURL") Cheat sheet
+
+            searchbar-input(v-model="modelValue.searchValue", @open-search-modal="openSearch")
+
             navigation-list(@path-updated="emitPath")
             .flex-filler
             collapse-button(@close-navigation="closeNavigation")
 </template>
 
 <script setup>
-import { computed, reactive } from "vue";
+import { computed } from "vue";
+
+// Components
 import collapseButton from "./collapseButton.vue";
 import navigationList from "./navigationList.vue";
+import searchbarInput from "./searchbarInput.vue";
 
-const emit = defineEmits(["pathUpdated"]);
-let states = reactive({
-    active: false,
-    navigation: null,
-});
+// Defining props & emits
+const props = defineProps(["modelValue"]);
+const emit = defineEmits(["pathUpdated", "update:modelValue"]);
+
+// Computed props
 const activeClass = computed(() => {
-    return states.active ? "active" : "";
+    if (props.modelValue && props.modelValue.activeNavigation) {
+        return "active";
+    } else {
+        return "";
+    }
 });
+
+// Emits
 function openNavigation() {
-    if (states.active) return;
-    states.active = !states.active;
+    props.modelValue.activeNavigation = true;
+    emit("update:modelValue", props.modelValue);
 }
 function closeNavigation() {
-    states.active = false;
+    props.modelValue.activeNavigation = false;
+    emit("update:modelValue", props.modelValue);
 }
-
+function openSearch() {
+    props.modelValue.activeSearch = true;
+    emit("update:modelValue", props.modelValue);
+}
 function setPathInURL() {
     window.history.replaceState(null, document.title, "/");
     closeNavigation();
     emit("pathUpdated");
 }
-
 function emitPath() {
     closeNavigation();
     emit("pathUpdated");
@@ -65,18 +80,33 @@ function emitPath() {
 
         background-color: $navigation-drawer-inner-background-color;
 
+        transition: all 0.3s ease-in-out;
+
         p.inactive-msg {
             text-transform: uppercase;
-            font-weight: 900;
+            font-weight: 1000;
             letter-spacing: 4px;
             word-spacing: 6px;
             font-size: 2rem;
-            color: $font-color;
             transform-origin: center;
             transform: rotate(-90deg);
             min-width: max-content;
             margin: auto 0;
-            cursor: pointer;
+            background: linear-gradient(to right, #ffffffbe 0%, white 5%, #ffffffbe 15%);
+            background-position: 0;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 4s infinite linear;
+            animation-fill-mode: forwards;
+        }
+
+        @keyframes shine {
+            0% {
+                background-position: 0;
+            }
+            100% {
+                background-position: 100vh;
+            }
         }
     }
 
@@ -95,14 +125,7 @@ function emitPath() {
                     font-size: 2rem;
                     text-align: center;
                     color: $font-color;
-                    cursor: pointer;
-                }
-                .searchbar {
-                    border: none;
-                    border-radius: 1rem;
-                    font-size: 16px;
-                    padding: 4px 8px;
-                    margin-bottom: 16px;
+                    white-space: nowrap;
                 }
             }
         }

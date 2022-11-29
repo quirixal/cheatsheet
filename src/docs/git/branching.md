@@ -1,3 +1,6 @@
+[title]: <> (Git - Branching)
+[description]: <> (Fuu bla)
+[keywords]: <> (git, branching)
 # Git - Branching
 ## Git Basics
 Please have a look into [Git Basics](?path=src/docs/git/basics.md) section.
