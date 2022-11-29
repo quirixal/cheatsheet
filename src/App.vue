@@ -1,22 +1,23 @@
 <template lang="pug">
-navigation-drawer(@path-updated="renderMarkdownFile()", v-model="states")
+navigation-drawer(v-model="states", @path-updated="renderMarkdownFile()")
+search-modal(v-model:active="states.activeSearch", v-model:searchValue="states.searchValue", @close-navigation="closeNavigationAndResetSearchValue" @path-updated="renderMarkdownFile()")
 main#content
 </template>
 
 <script setup>
-import navigationDrawer from "./components/navigationDrawer.vue";
 import { markdown } from "./markdownit";
 import { onMounted, inject, reactive } from "vue";
 import axios from "./axios.js";
 
 // Components
 import navigationDrawer from "./components/navigationDrawer.vue";
+import searchModal from "./components/searchModal.vue";
 
 // Defining config & states
 const config = inject("config");
 const states = reactive({
-    activeNavigation: true,
-    activeSearch: true,
+    activeNavigation: false,
+    activeSearch: false,
     searchValue: null,
 });
 
@@ -32,7 +33,13 @@ async function renderMarkdownFile() {
     } else {
         data = (await axios.get(`/cheatsheet/contents/${urlQuery}?ref=${branch}`)).data;
     }
-    document.querySelector("main#content").innerHTML = md.render(atob(data.content));
+    let htmlString = atob(data.content);
+    document.querySelector("main#content").innerHTML = md.render(htmlString.slice(htmlString.lastIndexOf("-->") + 3));
+}
+
+function closeNavigationAndResetSearchValue() {
+    states.activeNavigation = !states.activeNavigation;
+    states.searchValue = null;
 }
 
 onMounted(() => {

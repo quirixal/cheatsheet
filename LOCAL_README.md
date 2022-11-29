@@ -1,4 +1,4 @@
-# Cheatsheet | Local
+# Cheat sheet | Local
 
 ## Project Setup
 Setting up the project for development reasons is pretty simple. Simply [clone the repository](https://github.com/PatrickMaul/cheatsheet). And run the following command in your shell.
