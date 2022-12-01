@@ -18,10 +18,12 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
             - run: |
+                  npm i
                   node src/assets/scripts/indexing_docs_directory.js
                   git config --global user.name "indexing_bot"
                   git config --global user.email "indexing_bot"
                   git fetch --all
-                  git add * && git commit -m "indexing_bot: Indexing docs" || echo "Indexing_bot: nothing to commit"
+                  git pull
+                  git add -A && git commit -m "indexing_bot: Indexing docs" || echo "Indexing_bot: nothing to commit"
                   git push
               shell: bash

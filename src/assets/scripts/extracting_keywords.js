@@ -3,74 +3,29 @@ const path = require("path");
 const lemmatizer = require("node-lemmatizer");
 const natural = require("natural");
 
-const baseDirectoryPath = "./src/docs";
-const baseDirectoryContent = fs.readdirSync(baseDirectoryPath);
-const subdirectories = [];
-const indexedDocs = [];
+// const paths = [
+//     // "./README.md",
+//     "./src/docs/git/basics.md",
+//     "./src/docs/git/branching.md",
+//     "./src/docs/git/useful_scripts.md",
+//     "./src/docs/technology/vue.js.md",
+// ];
 
-baseDirectoryContent.forEach((element) => {
-    if (fs.lstatSync(`${baseDirectoryPath}/${element}`).isDirectory()) {
-        subdirectories.push(element);
-    }
-});
+// paths.forEach((path) => {
+//     indexingMDFile(path);
+// });
 
-subdirectories.forEach((directory) => {
-    const fullPath = `${baseDirectoryPath}/${directory}`;
-    const files = fs.readdirSync(fullPath);
-    let tempArrayFileLinks = [];
-    for (const file of files) {
-        if (path.extname(file) === ".md") {
-            let indexedFile = indexingFile(`${fullPath}/${file}`);
-            indexedFile.label = formatTitle(file);
-            tempArrayFileLinks.push(indexedFile);
-        }
-    }
-    indexedDocs.push({ title: formatTitle(directory), links: tempArrayFileLinks });
-});
-
-function indexingFile(filePath) {
-    const fileContents = fs.readFileSync(filePath).toString();
-    const fileLines = fileContents.split(/r?\n/);
-    let keys = ["title", "description", "keywords"];
-    let result = {};
-
-    for (let i = 0; i < keys.length; i++) {
-        let element = fileLines[i].match(/(?<=\().+(?=\))/);
-        element = element ? element[0] : null;
-        result[keys[i]] = element;
-    }
-
-    const keywords = indexingMDFile(filePath, 0, 10);
-    let resKeywords = new Set([...result.keywords.split(", "), ...keywords]);
-    result.keywords = [...resKeywords];
-    result.path = filePath.replace("./", "");
-
-    return result;
-}
-
-fs.writeFileSync("./src/assets/json/indexed_docs_directory.json", JSON.stringify(indexedDocs));
-
-function formatTitle(title) {
-    title = title[0].toUpperCase() + title.substring(1);
-    title = title.replace("_", " ");
-
-    if (title.endsWith(".md")) {
-        return title.substring(0, title.length - 3);
-    }
-    return title;
-}
-
-function indexingMDFile(path, minWordCounter, maxBest) {
+function indexingMDFile(path) {
     let content = fs.readFileSync(path).toString();
     content = lowerCasingContent(content);
     content = tokenize(content);
     content = pos(content);
     content = lemmatize(content);
     content = removeStopWords(content);
-    content = tf(content, minWordCounter);
+    content = tf(content, 1);
     content = idf(content);
 
-    return getBestKeywords(content, maxBest);
+    return getBestKeywords(content, 8);
 }
 
 function lowerCasingContent(content) {
@@ -199,8 +154,6 @@ function idf(content) {
                     tokenObj.documentCounter += doc.includes(tokenObj.token) ? 1 : 0;
                 });
                 content.forEach((tokenObj) => {
-                    tokenObj.documentCounter = tokenObj.documentCounter || 1;
-
                     tokenObj.idf = 1 / tokenObj.documentCounter;
                     tokenObj.tfIdf = tokenObj.tf * tokenObj.idf;
                 });
@@ -228,5 +181,6 @@ function getBestKeywords(content, max = 5) {
     }
 
     result = result.map((x) => x.token);
+    console.log(result);
     return result;
 }
