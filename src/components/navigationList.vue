@@ -3,7 +3,7 @@ nav.link-section-wrapper
     .link-section(v-for="section in indexedDocs")
         h4.link-section-title {{section.title}}
         ul.link-section-links
-            li.link.pointer(v-for="link in section.links", @click="setPathInURL(link.path)") {{link.label}}
+            li.link.pointer(v-for="link in section.links", @click="setPathInURL(link.path)") {{link.title}}
 </template>
 
 <script setup>
