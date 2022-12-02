@@ -22,7 +22,7 @@
 import { computed, onUpdated, reactive, watch } from "vue";
 import indexedDocs from "@/assets/json/indexed_docs_directory.json";
 
-import searchResultItem from "@/components/SearchResultItem.vue";
+import searchResultItem from "./searchResultItem.vue";
 
 const props = defineProps(["searchValue", "active"]);
 const emit = defineEmits(["update:searchValue", "update:active", "pathUpdated", "closeNavigation"]);
