@@ -4,7 +4,7 @@ import config from "./config.json";
 const ax = axios;
 ax.defaults.headers = {
     Accept: "application/vnd.github+json",
-    Authorization: `Bearer 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`,
+    Authorization: `Bearer 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`,
 };
 ax.defaults.baseURL = "https://api.github.com/repos/patrickmaul";
 
