@@ -1,7 +1,7 @@
 <template lang="pug">
-#search-modal.flex(v-if="props.active", @click.self="emit('update:active', false)")
+#search-modal.flex(v-if="props.active", @click.self="closeSearch")
     .card
-        button.close-btn.pointer(@click="emit('update:active', false)")
+        button.close-btn.pointer(@click="closeSearch")
             span.material-symbols-outlined close
         h1.card-title Search though cheat sheet
         input.searchbar(:value="props.searchValue", type="text", name="search", placeholder="Search...", @input="emit('update:searchValue', $event.target.value)")
@@ -11,16 +11,24 @@
             ul.result-list(v-if="search && search.length >=1")
                 search-result-item(v-for="result in search", :result="result", @update-path="setPathInURL($event)")
             p(v-else) Nothing found
+        .recent-search(v-else)
+            hr
+            ul.recent-search-list(v-if="data.recentSearch && data.recentSearch.length >=1")
+                li.recent-search-result.pointer(v-for="result in data.recentSearch", @click="emit('update:searchValue',result)") {{result}}
+            p(v-else) Nothing searched yet!
 </template>
 
 <script setup>
-import { computed, onUpdated } from "vue";
+import { computed, onUpdated, reactive, watch } from "vue";
 import indexedDocs from "@/assets/json/indexed_docs_directory.json";
 
 import searchResultItem from "@/components/SearchResultItem.vue";
 
 const props = defineProps(["searchValue", "active"]);
 const emit = defineEmits(["update:searchValue", "update:active", "pathUpdated", "closeNavigation"]);
+const data = reactive({
+    recentSearch: null,
+});
 
 const search = computed(() => {
     let base = [];
@@ -48,14 +56,43 @@ const search = computed(() => {
 function setPathInURL(path) {
     window.history.replaceState(null, document.title, `?path=${path}`);
     emit("pathUpdated");
-    emit("update:active", false);
+    closeSearch();
     emit("closeNavigation");
 }
 
+function closeSearch() {
+    if (props.searchValue) {
+        let recentSearch = JSON.parse(localStorage.getItem("recentSearch"));
+
+        if (!recentSearch) {
+            recentSearch = [];
+            recentSearch.push(props.searchValue);
+        } else {
+            if (!recentSearch.includes(props.searchValue)) {
+                recentSearch.unshift(props.searchValue);
+            }
+        }
+        localStorage.setItem("recentSearch", JSON.stringify(recentSearch));
+    }
+    emit("update:searchValue", null);
+    emit("update:active", false);
+}
+
+function loadRecentSearch() {
+    return JSON.parse(localStorage.getItem("recentSearch"));
+}
+
 onUpdated(() => {
-    if (props.active) {
+    if (props && props.active) {
         const searchbar = document.querySelector("#search-modal .card .searchbar");
         searchbar.focus();
+    }
+});
+
+watch(props, (props) => {
+    if (props.active) {
+        const loadedRecentSearch = loadRecentSearch();
+        if (data.recentSearch != loadedRecentSearch) data.recentSearch = loadedRecentSearch;
     }
 });
 </script>
@@ -79,6 +116,7 @@ onUpdated(() => {
         height: 600px;
         border-radius: 10px;
         box-shadow: 2px 2px 15px #ffffff80;
+        overflow-y: scroll;
 
         .close-btn {
             position: absolute;
@@ -108,17 +146,26 @@ onUpdated(() => {
             padding: $app-padding;
         }
 
-        .results {
+        .results,
+        .recent-search {
             hr {
                 border: none;
                 height: 1px;
                 background-color: $primary-color;
             }
 
-            .result-list {
+            .result-list,
+            .recent-search-list {
                 padding: 0;
                 margin: 0;
                 list-style-type: none;
+
+                .recent-search-result {
+                    border: 2px solid $primary-color;
+                    border-radius: 3px;
+                    padding: $app-padding;
+                    margin: 0 0 $app-padding 0;
+                }
             }
         }
     }
