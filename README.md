@@ -7,7 +7,16 @@ In addition, the range is constantly being expanded and updated.
 As it is kept for private use only, we ask that you apologize and/or report anything that is invalid or outdated.
 
 ## Changelog
-### 0.1.2 (Current development version)
+### 0.1.3 (Current development version)
+Indexing documents and  generate keywords from documents, when pushed on `main`.
+
+Other changes made:
+- Prevent scrolling while navigation is open
+- Updating docs
+- Autofocus search bar
+- Outsource buttons code
+- Add recent search
+### 0.1.2
 Adding a search function, available in the navigation
 
 Other changes made:
