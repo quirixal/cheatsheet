@@ -1,53 +1,30 @@
 <template lang="pug">
-#navigation-drawer(:class="activeClass", @click.self="closeNavigation")
+#navigation-drawer(:class="{'active':props.activeNavigation}", @click.self="closeNavigation")
     .content-wrapper.flex
-        p.inactive-msg.pointer(v-if="!modelValue.activeNavigation", @click="openNavigation") Click to open navigation bar
+        p.inactive-msg.pointer(v-if="!props.activeNavigation", @click="emit('update:activeNavigation', true)") Click to open navigation bar
 
-        .inner-wrapper.flex.column(v-show="modelValue.activeNavigation")
-            h2.nav-title.pointer(@click="setPathInURL") Cheat sheet
-
-            searchbar-input(v-model="modelValue.searchValue", @open-search-modal="openSearch")
-
+        .inner-wrapper.flex.column(v-show="props.activeNavigation")
+            h2.nav-title.pointer(@click="resetURLState") Cheat sheet
+            primary-button(label="Open search", icon-left="search", @click="emit('update:activeSearch', true)")
             navigation-list(@path-updated="emitPath")
             .flex-filler
-            collapse-button(@close-navigation="closeNavigation")
+            primary-button(label="Collapse navigation", icon-left="keyboard_double_arrow_left", icon-right="keyboard_double_arrow_left", @click="closeNavigation")
 </template>
 
 <script setup>
-import { computed } from "vue";
-
 // Components
-import collapseButton from "./collapseButton.vue";
 import navigationList from "./navigationList.vue";
-import searchbarInput from "./searchbarInput.vue";
+import primaryButton from "./core/buttons/primaryButton.vue";
 
 // Defining props & emits
-const props = defineProps(["modelValue"]);
-const emit = defineEmits(["pathUpdated", "update:modelValue"]);
+const props = defineProps(["activeNavigation", "activeSearch"]);
+const emit = defineEmits(["pathUpdated", "update:activeNavigation", "update:activeSearch"]);
 
-// Computed props
-const activeClass = computed(() => {
-    if (props.modelValue && props.modelValue.activeNavigation) {
-        return "active";
-    } else {
-        return "";
-    }
-});
-
-// Emits
-function openNavigation() {
-    props.modelValue.activeNavigation = true;
-    emit("update:modelValue", props.modelValue);
-}
+// Functions
 function closeNavigation() {
-    props.modelValue.activeNavigation = false;
-    emit("update:modelValue", props.modelValue);
+    emit("update:activeNavigation", false);
 }
-function openSearch() {
-    props.modelValue.activeSearch = true;
-    emit("update:modelValue", props.modelValue);
-}
-function setPathInURL() {
+function resetURLState() {
     window.history.replaceState(null, document.title, "/");
     closeNavigation();
     emit("pathUpdated");
@@ -126,6 +103,21 @@ function emitPath() {
                     text-align: center;
                     color: $font-color;
                     white-space: nowrap;
+                }
+
+                .open-search-button {
+                    padding: $app-padding;
+
+                    border: $collapse-btn-border solid $collapse-btn-border-color;
+                    border-radius: $collapse-btn-border-radius;
+
+                    background-color: $collapse-btn-background-color;
+                    color: $font-color;
+
+                    font-size: 16px;
+
+                    justify-content: space-around;
+                    align-items: center;
                 }
             }
         }

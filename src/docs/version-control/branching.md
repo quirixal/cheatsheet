@@ -1,6 +1,5 @@
-[title]: <> (Git - Branching)
-[description]: <> (Fuu bla)
-[keywords]: <> (git, branching)
+[description]: <> (Git branching basics, like how to create a new branch, switching branches, etc.)
+[preservedKeywords]: <> (git, branching, branch, create, delete, checkout, rebase, reset)
 # Git - Branching
 ## Git Basics
 Please have a look into [Git Basics](?path=src/docs/git/basics.md) section.

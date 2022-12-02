@@ -26,6 +26,7 @@ defineEmits(["updatePath"]);
             margin: 0;
             margin: 0 0 $app-padding 0;
             font-size: 18px;
+            font-weight: 600;
         }
     }
 
@@ -38,6 +39,8 @@ defineEmits(["updatePath"]);
             -webkit-box-orient: vertical;
             overflow: hidden;
             font-size: 14px;
+            font-weight: 300;
+            color: #444444;
         }
         .result-item-keywords {
             margin: 0;
@@ -57,6 +60,8 @@ defineEmits(["updatePath"]);
                 padding: 4px 8px;
                 border-radius: 1rem;
                 text-align: center;
+                white-space: nowrap;
+                width: max-content;
             }
         }
     }
