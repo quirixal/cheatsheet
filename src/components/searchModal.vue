@@ -21,6 +21,7 @@
 <script setup>
 import { computed, onUpdated, reactive, watch } from "vue";
 import indexedDocs from "@/assets/json/indexed_docs_directory.json";
+import Fuse from "fuse.js";
 
 import searchResultItem from "./searchResultItem.vue";
 
@@ -31,26 +32,24 @@ const data = reactive({
 });
 
 const search = computed(() => {
+    const options = {
+        includeScore: true,
+        includeMatches: true,
+        findAllMatches: true,
+        maxPatternLength: 32,
+        minMatchCharLength: 2,
+        threshold: 0.4,
+        shouldSort: true,
+        keys: ["title", "description", "keywords"],
+    };
+
     let base = [];
     indexedDocs.forEach((section) => {
         base.push(...section.links);
     });
 
-    if (props.searchValue) {
-        return base.filter((file) => {
-            const filename = file.title.toLowerCase();
-            const fileDescription = file.description.toLowerCase();
-            const fileKeywords = [...file.keywords];
-            const searchValue = props.searchValue.toLowerCase();
-
-            const keywordsIncludesSearchValue =
-                fileKeywords.filter((keyword) => keyword.includes(searchValue)).length >= 1;
-            return (
-                filename.includes(searchValue) || fileDescription.includes(searchValue) || keywordsIncludesSearchValue
-            );
-        });
-    }
-    return null;
+    const fuse = new Fuse(base, options);
+    return fuse.search(props.searchValue).map((el) => el.item);
 });
 
 function setPathInURL(path) {
