@@ -4,7 +4,7 @@
         button.close-btn.pointer(@click="closeSearch")
             span.material-symbols-outlined close
         h1.card-title Search though cheat sheet
-        input.searchbar(:value="props.searchValue", type="text", name="search", placeholder="Search...", @input="search")
+        input.searchbar(:value="props.searchValue", type="text", name="search", placeholder="Search... (Use `\\` to matches exactly)", @input="search")
 
         .results(v-if="props.searchValue")
             hr
@@ -35,15 +35,20 @@ const data = reactive({
 
 function search($event) {
     emit("update:searchValue", $event.target.value);
+    if ($event.target.value.length <= 2) return;
+
+    let fuzzySearchValue = $event.target.value;
+    if ($event.target.value.match(/^\\/)) fuzzySearchValue = `="${$event.target.value.substring(1)}"`;
+
+    console.log(fuzzySearchValue);
 
     const options = {
         includeScore: true,
         includeMatches: true,
-        findAllMatches: true,
-        maxPatternLength: 32,
-        minMatchCharLength: 2,
-        threshold: 0.4,
+        findAllMatches: false,
+        useExtendedSearch: true,
         shouldSort: true,
+        distance: 70,
         keys: ["title", "description", "keywords"],
     };
 
@@ -58,7 +63,6 @@ function search($event) {
 
                 for (var i = 0; i < matchValue.length; i++) {
                     var char = matchValue.charAt(i);
-                    console.log(char);
                     if (pair && i == pair[0]) {
                         result.push('<span class="fuzzy-highlight">');
                     }
@@ -75,7 +79,7 @@ function search($event) {
     };
 
     const fuse = new Fuse(data.searchValueList, options);
-    let result = fuse.search($event.target.value);
+    let result = fuse.search(fuzzySearchValue);
 
     result = result.map((resultItem) => highlighter(resultItem));
 
