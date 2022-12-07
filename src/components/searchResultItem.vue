@@ -5,7 +5,7 @@ li.result-item.pointer.flex.column(@click="$emit('updatePath', result.path)")
     .result-item-content
         p.result-item-description(v-html="result.highlighted.description ? result.highlighted.description : result.description")
         p.result-item-keywords
-            .chip(v-for="key in result.keywords") {{key}}
+            .chip(v-for="key in result.highlighted.keywords ? result.highlighted.keywords : result.keywords", v-html="key")
 </template>
 
 <script setup>
@@ -66,7 +66,7 @@ defineEmits(["updatePath"]);
         }
     }
 
-    span.fuzzy-highlight {
+    .fuzzy-highlight {
         text-decoration: underline !important;
     }
 }

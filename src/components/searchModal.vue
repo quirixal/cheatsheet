@@ -40,8 +40,6 @@ function search($event) {
     let fuzzySearchValue = $event.target.value;
     if ($event.target.value.match(/^\\/)) fuzzySearchValue = `="${$event.target.value.substring(1)}"`;
 
-    console.log(fuzzySearchValue);
-
     const options = {
         includeScore: true,
         includeMatches: true,
@@ -73,6 +71,33 @@ function search($event) {
                     }
                 }
                 resultItem.item.highlighted[matchItem.key] = result.join("");
+            } else {
+                matchValue = resultItem.item[matchItem.key]; // Array
+                result = [];
+
+                matchValue.forEach((value) => {
+                    if (value != matchItem.value) {
+                        result.push(value);
+                        return;
+                    }
+
+                    var matches = [].concat(matchItem.indices); // limpar referencia
+                    var pair = matches.shift();
+                    let keyword = "";
+                    for (i = 0; i < value.length; i++) {
+                        char = value.charAt(i);
+                        if (pair && i == pair[0]) {
+                            keyword = '<span class="fuzzy-highlight">';
+                        }
+                        keyword += char;
+                        if (pair && i == pair[1]) {
+                            keyword += "</span>";
+                            pair = matches.shift();
+                        }
+                    }
+                    result.push(keyword);
+                });
+                resultItem.item.highlighted.keywords = result;
             }
         });
         return resultItem;
