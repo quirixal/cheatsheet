@@ -4,12 +4,12 @@
         button.close-btn.pointer(@click="closeSearch")
             span.material-symbols-outlined close
         h1.card-title Search though cheat sheet
-        input.searchbar(:value="props.searchValue", type="text", name="search", placeholder="Search...", @input="emit('update:searchValue', $event.target.value)")
+        input.searchbar(:value="props.searchValue", type="text", name="search", placeholder="Search...", @input="search")
 
         .results(v-if="props.searchValue")
             hr
-            ul.result-list(v-if="search && search.length >=1")
-                search-result-item(v-for="result in search", :result="result", @update-path="setPathInURL($event)")
+            ul.result-list(v-if="data.searchResult && data.searchResult.length >=1")
+                search-result-item(v-for="result in data.searchResult", :result="result", @update-path="setPathInURL($event)")
             p(v-else) Nothing found
         .recent-search(v-else)
             hr
@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import { computed, onUpdated, reactive, watch } from "vue";
+import { computed, onMounted, onUpdated, reactive, watch } from "vue";
 import indexedDocs from "@/assets/json/indexed_docs_directory.json";
 import Fuse from "fuse.js";
 
@@ -28,10 +28,14 @@ import searchResultItem from "./searchResultItem.vue";
 const props = defineProps(["searchValue", "active"]);
 const emit = defineEmits(["update:searchValue", "update:active", "pathUpdated", "closeNavigation"]);
 const data = reactive({
+    searchValueList: null,
     recentSearch: null,
+    searchResult: [],
 });
 
-const search = computed(() => {
+function search($event) {
+    emit("update:searchValue", $event.target.value);
+
     const options = {
         includeScore: true,
         includeMatches: true,
@@ -43,14 +47,40 @@ const search = computed(() => {
         keys: ["title", "description", "keywords"],
     };
 
-    let base = [];
-    indexedDocs.forEach((section) => {
-        base.push(...section.links);
-    });
+    var highlighter = function (resultItem) {
+        resultItem.item.highlighted = {};
+        resultItem.matches.forEach((matchItem) => {
+            if (matchItem.key != "keywords") {
+                var matchValue = resultItem.item[matchItem.key];
+                var result = [];
+                var matches = [].concat(matchItem.indices); // limpar referencia
+                var pair = matches.shift();
 
-    const fuse = new Fuse(base, options);
-    return fuse.search(props.searchValue).map((el) => el.item);
-});
+                for (var i = 0; i < matchValue.length; i++) {
+                    var char = matchValue.charAt(i);
+                    console.log(char);
+                    if (pair && i == pair[0]) {
+                        result.push('<span class="fuzzy-highlight">');
+                    }
+                    result.push(char);
+                    if (pair && i == pair[1]) {
+                        result.push("</span>");
+                        pair = matches.shift();
+                    }
+                }
+                resultItem.item.highlighted[matchItem.key] = result.join("");
+            }
+        });
+        return resultItem;
+    };
+
+    const fuse = new Fuse(data.searchValueList, options);
+    let result = fuse.search($event.target.value);
+
+    result = result.map((resultItem) => highlighter(resultItem));
+
+    data.searchResult = result.map((el) => el.item);
+}
 
 function setPathInURL(path) {
     window.history.replaceState(null, document.title, `?path=${path}`);
@@ -77,10 +107,6 @@ function closeSearch() {
     emit("update:active", false);
 }
 
-function loadRecentSearch() {
-    return JSON.parse(localStorage.getItem("recentSearch"));
-}
-
 onUpdated(() => {
     if (props && props.active) {
         const searchbar = document.querySelector("#search-modal .card .searchbar");
@@ -88,11 +114,18 @@ onUpdated(() => {
     }
 });
 
+function loadRecentSearch() {
+    return JSON.parse(localStorage.getItem("recentSearch"));
+}
 watch(props, (props) => {
     if (props.active) {
         const loadedRecentSearch = loadRecentSearch();
         if (data.recentSearch != loadedRecentSearch) data.recentSearch = loadedRecentSearch;
     }
+});
+
+onMounted(() => {
+    data.searchValueList = indexedDocs.map((section) => section.links).flat(1);
 });
 </script>
 
