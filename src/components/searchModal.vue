@@ -3,7 +3,7 @@
     .card
         button.close-btn.pointer(@click="closeSearch")
             span.material-symbols-outlined close
-        h1.card-title Search though cheat sheet
+        h1.card-title Search through cheat sheet
         input.searchbar(:value="props.searchValue", type="text", name="search", placeholder="Search... (Use `\\` to matches exactly)", @input="search")
 
         .results(v-if="props.searchValue")
