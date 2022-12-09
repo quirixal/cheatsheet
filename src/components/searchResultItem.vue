@@ -1,11 +1,11 @@
 <template lang="pug">
 li.result-item.pointer.flex.column(@click="$emit('updatePath', result.path)")
     .result-item-header
-        p.result-item-title {{result.title}}
+        p.result-item-title(v-html="result.highlighted.title ? result.highlighted.title : result.title")
     .result-item-content
-        p.result-item-description {{result.description}}
+        p.result-item-description(v-html="result.highlighted.description ? result.highlighted.description : result.description")
         p.result-item-keywords
-            .chip(v-for="key in result.keywords") {{key}}
+            .chip(v-for="key in result.highlighted.keywords ? result.highlighted.keywords : result.keywords", v-html="key")
 </template>
 
 <script setup>
@@ -13,7 +13,7 @@ defineProps(["result"]);
 defineEmits(["updatePath"]);
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .result-item {
     border: 2px solid $primary-color;
     border-radius: 3px;
@@ -64,6 +64,10 @@ defineEmits(["updatePath"]);
                 width: max-content;
             }
         }
+    }
+
+    .fuzzy-highlight {
+        text-decoration: underline !important;
     }
 }
 </style>
