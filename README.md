@@ -7,7 +7,9 @@ In addition, the range is constantly being expanded and updated.
 As it is kept for private use only, we ask that you apologize and/or report anything that is invalid or outdated.
 
 ## Changelog
-### 0.1.4 (Current development version)
+### 0.1.5 [HOTFIX!] (Current development version)
+Remove sensitive data!
+### 0.1.4
 Add build and deployment to github action.
 ### 0.1.3
 Indexing documents and  generate keywords from documents, when pushed on `main`.
