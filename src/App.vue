@@ -8,7 +8,7 @@ main#content(:class="{'no-scroll':states.activeNavigation}")
 import { markdown } from "./markdownit";
 import { onMounted, inject, reactive } from "vue";
 import { http } from "./axios.js";
-import ClipboardJs from 'clipboard'
+import ClipboardJs from "clipboard";
 
 // Components
 import navigationDrawer from "./components/navigationDrawer.vue";
@@ -29,25 +29,24 @@ async function renderMarkdownFile() {
 
     const path = urlQuery ? "/" + urlQuery : "/README.md";
     const rawReadmeData = (await http.get(path)).data;
-    document.querySelector("main#content").innerHTML = md.render(rawReadmeData);
-    clipboard.on('success', (e) => {
-        console.log('copy success', e);
-        e.trigger.innerText = 'check';
-        setTimeout(() => {
-            e.trigger.innerText = 'content_copy';
-        }, 1000)
-    })
+    document.querySelector("main#content").innerHTML = addCopyElementToPreElements(md.render(rawReadmeData));
 
-    clipboard.on('error', (e) => {
-        console.log('copy error', e);
-    })
-    const clipboard = new ClipboardJs('.clipboard', {
+    const clipboard = new ClipboardJs(".clipboard", {
         text: (preIconElement) => {
             return preIconElement.nextElementSibling.innerText;
-        }
-    })
+        },
+    });
+    clipboard.on("success", (e) => {
+        console.log("copy success", e);
+        e.trigger.innerText = "check";
+        setTimeout(() => {
+            e.trigger.innerText = "content_copy";
+        }, 1000);
+    });
 
-
+    clipboard.on("error", (e) => {
+        console.log("copy error", e);
+    });
 }
 
 function addCopyElementToPreElements(content) {
