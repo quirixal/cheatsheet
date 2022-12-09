@@ -7,7 +7,7 @@ main#content(:class="{'no-scroll':states.activeNavigation}")
 <script setup>
 import { markdown } from "./markdownit";
 import { onMounted, inject, reactive } from "vue";
-import axios from "./axios.js";
+import { http } from "./axios.js";
 
 // Components
 import navigationDrawer from "./components/navigationDrawer.vue";
@@ -24,16 +24,11 @@ const states = reactive({
 // Render function
 async function renderMarkdownFile() {
     const md = markdown;
-    const branch = config.development ? config.branch : "production";
     const urlQuery = window.location.search.replace("?path=", "");
 
-    let data;
-    if (!urlQuery) {
-        data = (await axios.get(`/cheatsheet/readme?ref=${branch}`)).data;
-    } else {
-        data = (await axios.get(`/cheatsheet/contents/${urlQuery}?ref=${branch}`)).data;
-    }
-    document.querySelector("main#content").innerHTML = md.render(atob(data.content));
+    const path = urlQuery ? '/' + urlQuery : '/README.md'
+    const rawReadmeData = (await http.get(path)).data
+    document.querySelector("main#content").innerHTML = md.render(rawReadmeData);
 }
 
 function closeNavigationAndResetSearchValue() {

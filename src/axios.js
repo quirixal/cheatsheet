@@ -1,12 +1,8 @@
 import axios from "axios";
+import config from './config.json'
 
-const ax = axios;
-ax.defaults.headers = {
-    Accept: "application/vnd.github+json",
-    Authorization: `Bearer ${atob(
-        "Z2l0aHViX3BhdF8xMUFYSTVYSlkwVlpCa2xvR1JNWTVVX01kb2NIZXFMN3N0Y1J3VkhuWG9GeEVtUlFJTjd0ZlF5djNHdm5qRUJoaEtaNkVTWjY1Umc0dnFRbUpZ"
-    )}`,
-};
-ax.defaults.baseURL = "https://api.github.com/repos/patrickmaul";
+const http = axios.create({
+    baseURL:  `https://raw.githubusercontent.com/PatrickMaul/cheatsheet/${config.branch}`
+});
 
-export default ax;
+export { http };
