@@ -25,7 +25,7 @@ function closeNavigation() {
     emit("update:activeNavigation", false);
 }
 function resetURLState() {
-    window.history.replaceState(null, document.title, "/");
+    window.history.replaceState(null, document.title, "/cheetsheet/");
     closeNavigation();
     emit("pathUpdated");
 }
