@@ -1,3 +1,4 @@
 {
-    "development": false
+    "development": false,
+    "branch": "production"
 }
