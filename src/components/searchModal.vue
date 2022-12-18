@@ -19,7 +19,7 @@
                 a.help-link(href="https://fusejs.io/examples.html#extended-search", target="__blank")
                     span.material-symbols-outlined help
                 .flex-filler
-                span Search made with #[a(href="https://fusejs.io/") Fuse.js]
+                span Made with #[a(href="https://fusejs.io/") Fuse.js]
 
 </template>
 
@@ -38,11 +38,13 @@ const data = reactive({
     recentSearch: null,
     searchResult: [],
 });
+const minSearchLength = 3;
+const maxRecentSearchValues = 5;
 
 function search() {
     let searchValue = data.searchValue;
 
-    if (searchValue?.length <= 2) {
+    if (searchValue?.length < minSearchLength) {
         data.searchResult = [];
         return;
     }
@@ -133,15 +135,15 @@ function setPathInURL(path) {
 }
 
 function closeSearch() {
-    if (data.searchValue.length >= 3) {
+    if (data.searchValue?.length >= minSearchLength) {
         let recentSearch = loadRecentSearch();
-        
+
         if (!recentSearch) {
             recentSearch = [];
             recentSearch.push(data.searchValue);
         } else {
             if (!recentSearch.includes(data.searchValue)) {
-                if (recentSearch.length === 5) {
+                if (recentSearch.length === maxRecentSearchValues) {
                     recentSearch.pop();
                 }
                 recentSearch.unshift(data.searchValue);
@@ -150,6 +152,7 @@ function closeSearch() {
         localStorage.setItem("recentSearch", JSON.stringify(recentSearch));
     }
     data.searchValue = null;
+    data.searchResult = [];
     emit("update:active", false);
 }
 
