@@ -13,6 +13,7 @@ Copy code direct viw copy button
 Other changes made:
 - Improvement of fuzzy search
 - Add link to fuse.js docs to search modal footer
+- Smaller style adjustments
 ### 0.1.5 [HOTFIX!]
 Remove sensitive data!
 

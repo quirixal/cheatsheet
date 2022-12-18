@@ -218,7 +218,7 @@ onMounted(() => {
                 margin: 0 0 18px 0;
             }
             .searchbar {
-                width: calc(100% - $app-padding * 2 - 4px);
+                width: 100%;
                 font-size: 18px;
                 padding: $app-padding;
             }
