@@ -1,6 +1,6 @@
 <template lang="pug">
 navigation-drawer(v-model:activeSearch="states.activeSearch", v-model:activeNavigation="states.activeNavigation", @path-updated="renderMarkdownFile()")
-search-modal(v-model:active="states.activeSearch", v-model:searchValue="states.searchValue", @close-navigation="closeNavigationAndResetSearchValue" @path-updated="renderMarkdownFile()")
+search-modal(v-model:active="states.activeSearch", @close-navigation="closeNavigationAndResetSearchValue" @path-updated="renderMarkdownFile()")
 main#content(:class="{'no-scroll':states.activeNavigation}")
 </template>
 
@@ -18,7 +18,6 @@ const config = inject("config");
 const states = reactive({
     activeNavigation: false,
     activeSearch: false,
-    searchValue: null,
 });
 
 // Render function
@@ -26,8 +25,8 @@ async function renderMarkdownFile() {
     const md = markdown;
     const urlQuery = window.location.search.replace("?path=", "");
 
-    const path = urlQuery ? '/' + urlQuery : '/README.md'
-    const rawReadmeData = (await http.get(path)).data
+    const path = urlQuery ? "/" + urlQuery : "/README.md";
+    const rawReadmeData = (await http.get(path)).data;
     document.querySelector("main#content").innerHTML = md.render(rawReadmeData);
 }
 

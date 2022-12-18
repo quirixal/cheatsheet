@@ -45,3 +45,9 @@ body {
 .pointer {
     cursor: pointer;
 }
+
+hr.divider {
+    border: none;
+    height: 1px;
+    background-color: $primary-color;
+}
