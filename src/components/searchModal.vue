@@ -55,10 +55,10 @@ function search() {
     const options = {
         includeScore: true,
         includeMatches: true,
-        findAllMatches: false,
-        useExtendedSearch: true,
         shouldSort: true,
-        distance: 70,
+        minMatchCharLength: minSearchLength,
+        threshold: 0.8,
+        useExtendedSearch: true,
         keys: ["title", "description", "keywords"],
     };
 
@@ -68,7 +68,7 @@ function search() {
             if (matchItem.key != "keywords") {
                 var matchValue = resultItem.item[matchItem.key];
                 var result = [];
-                var matches = [].concat(matchItem.indices); // limpar referencia
+                var matches = [].concat(matchItem.indices);
                 var pair = matches.shift();
 
                 for (var i = 0; i < matchValue.length; i++) {
@@ -93,7 +93,7 @@ function search() {
                         return;
                     }
 
-                    var matches = [].concat(matchItem.indices); // limpar referencia
+                    var matches = [].concat(matchItem.indices);
                     var pair = matches.shift();
                     let keyword = "";
                     for (i = 0; i < value.length; i++) {
