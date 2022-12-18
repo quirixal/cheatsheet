@@ -37,7 +37,9 @@ function emitPath() {
 
 <style lang="scss" scoped>
 #navigation-drawer {
-    width: $navigation-drawer-width-inactive;
+    width: calc(
+        $navigation-drawer-width-inactive - $navigation-drawer-inner-padding * 2 - $navigation-drawer-border-width
+    );
     height: 100vh;
     position: fixed;
     z-index: 10;
