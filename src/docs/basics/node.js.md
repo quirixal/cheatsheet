@@ -12,4 +12,4 @@ There are several ways to install Node.js. Some are listed here.
 3. Follow instructions
 
 ## Used resources
-- [Node.js website](https://nodejs.org/en/) (November 29th, 2022)
+- [Node.js website](https://nodejs.org/en/) (December 20th, 2022)
