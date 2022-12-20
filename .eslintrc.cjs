@@ -8,7 +8,7 @@ module.exports = {
         ecmaVersion: "latest",
     },
     rules: {
-        "no-unused-vars": "warn",
+        "no-unused-vars": "off",
         "vue/no-mutating-props": "off",
     },
 };

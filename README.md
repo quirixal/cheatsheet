@@ -7,12 +7,19 @@ In addition, the range is constantly being expanded and updated.
 As it is kept for private use only, we ask that you apologize and/or report anything that is invalid or outdated.
 
 ## Changelog
-### 0.1.5 [HOTFIX!] (Current development version)
+### 0.1.6 
+Copy code direct via copy button.
+
+Other changes made:
+- Improvement of fuzzy search
+- Add link to fuse.js docs to search modal footer
+- Smaller style adjustments
+### 0.1.5 [HOTFIX!]
 Remove sensitive data!
 
 Other changes made:
 - Implement fuzzy search with fuse.js => Need more attention yet!
-- Highlighting search results
+- Highlighting search result
 ### 0.1.4
 Add build and deployment to github action.
 ### 0.1.3
