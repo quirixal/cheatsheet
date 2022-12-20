@@ -5,7 +5,7 @@
             button.close-btn.pointer(@click="closeSearch")
                 span.material-symbols-outlined close
             h1.card-title Search through cheat sheet
-            input.searchbar(v-model="data.searchValue", type="text", name="search", placeholder="Type to search, see ? for more information.", @input="search")
+            input.searchbar(v-model="data.searchValue", type="text", name="search", placeholder="Type to search...", @input="search")
         
         .card-body.flex-filler
             p.hint(v-if="data.searchResult?.length === 0 && data.searchValue?.length >= 3") Nothing Found

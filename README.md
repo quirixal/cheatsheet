@@ -7,8 +7,8 @@ In addition, the range is constantly being expanded and updated.
 As it is kept for private use only, we ask that you apologize and/or report anything that is invalid or outdated.
 
 ## Changelog
-### 0.1.6 (Current development version)
-Copy code direct viw copy button
+### 0.1.6 
+Copy code direct via copy button.
 
 Other changes made:
 - Improvement of fuzzy search
@@ -20,6 +20,8 @@ Remove sensitive data!
 Other changes made:
 - Implement fuzzy search with fuse.js => Need more attention yet!
 - Highlighting search result
+### 0.1.4
+Add build and deployment to github action.
 ### 0.1.3
 Indexing documents and  generate keywords from documents, when pushed on `main`.
 
