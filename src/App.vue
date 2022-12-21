@@ -27,7 +27,7 @@ async function renderMarkdownFile() {
     const md = markdown;
     const urlQuery = window.location.search.replace("?path=", "");
 
-    const path = urlQuery ? "/" + urlQuery : "/README.md";
+    const path = urlQuery ? "/" + urlQuery : "/src/docs/index.md";
     const rawReadmeData = (await http.get(path)).data;
     document.querySelector("main#content").innerHTML = addCopyElementToPreElements(md.render(rawReadmeData));
 
