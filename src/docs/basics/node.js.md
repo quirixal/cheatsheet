@@ -13,7 +13,7 @@ There are several ways to install Node.js. Some are listed here.
 
 ### Via package manager
 #### Homebrew
-[Further details about Homebrew](./homebrew.md)
+[Further details about Homebrew](?path=src/docs/basics/homebrew.md)
 ```sh
 brew install node
 ```
