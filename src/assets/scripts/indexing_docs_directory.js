@@ -10,6 +10,11 @@ const indexedDocs = [];
 // Read base directory
 const docsBasePath = "./src/docs";
 let docsDirectoryContent = fs.readdirSync(docsBasePath);
+// Remove index.md
+if (docsDirectoryContent.includes("index.md")) {
+    docsDirectoryContent.splice(docsDirectoryContent.indexOf("index.md"), 1);
+}
+
 docsDirectoryContent = docsDirectoryContent.map((subDirectory) => {
     if (fs.lstatSync(`${docsBasePath}/${subDirectory}`).isDirectory()) return `${docsBasePath}/${subDirectory}`;
 });
@@ -17,6 +22,7 @@ docsDirectoryContent = docsDirectoryContent.map((subDirectory) => {
 // Read subdirectories
 docsDirectoryContent.forEach((subDirectory) => {
     const subDirectoryDocuments = fs.readdirSync(subDirectory);
+
     let indexedSubDirectoryDocuments = [];
 
     // Read all documents in subdirectory
@@ -248,6 +254,11 @@ function calculateDocumentFrequency(tokens) {
     // Read base directory
     const docsBasePath = "./src/docs";
     let docsDirectoryContent = fs.readdirSync(docsBasePath);
+    // Remove index.md
+    if (docsDirectoryContent.includes("index.md")) {
+        docsDirectoryContent.splice(docsDirectoryContent.indexOf("index.md"), 1);
+    }
+
     docsDirectoryContent = docsDirectoryContent.map((subDirectory) => {
         if (fs.lstatSync(`${docsBasePath}/${subDirectory}`).isDirectory()) return `${docsBasePath}/${subDirectory}`;
     });
