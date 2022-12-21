@@ -1,49 +1,81 @@
-# Cheat sheet
+# Cheat sheet | Readme
+> A cheat sheet is a condensed reference guide that provides quick and easy access to key information on a specific subject or task. Cheat sheets can be particularly useful for learners or professionals who need to quickly refresh their knowledge or learn new skills, as they provide a quick and easy way to access key information in a condensed format.[^1]
 
-This cheat sheet covers mostly web development (technologies, snippets, and other helpful stuff), Git, Docker, and something hardware related. Some resources are listed and some are described.
+## Table of contents
+- [Cheat sheet | Readme](#cheat-sheet--readme)
+  - [Table of contents](#table-of-contents)
+  - [Development setup](#development-setup)
+  - [Rules for developers](#rules-for-developers)
+  - [Tips for writing a sheet](#tips-for-writing-a-sheet)
+    - [Internal links](#internal-links)
+  - [How to's](#how-tos)
+    - [Generate new index](#generate-new-index)
+  - [Deployment](#deployment)
+  - [Testing \& Linting](#testing--linting)
+    - [Run Unit Tests with Vitest](#run-unit-tests-with-vitest)
+    - [Lint with ESLint](#lint-with-eslint)
+## Development setup
+Steps for setting up the Project:
+1. Clone [the repository](https://github.com/PatrickMaul/cheatsheet)
+   - `git clone https://github.com/PatrickMaul/cheatsheet`
+2. Change to project directory.
+   - `cd cheatsheet`
+3. Install dependencies.
+   - `npm install`
+4. Duplicate and rename `config-example.json` to `config.json`
+5. Set your own config
+   1. `development` => No impact at all
+   2. `branch` => Current feature branch
+6. Start development server.
+   - `npm run dev`
+## Rules for developers
+To ensure that this repository is always **neat and tidy**, a few **simple but important rules** have been established.  
+Changes **made without** following these rules **will not be merged**.
+1. **Always** work on a feature branch, preferably related to an [issue on GitHub](https://github.com/PatrickMaul/cheatsheet/issues).
+   1. Relating to an [issue on GitHub](https://github.com/PatrickMaul/cheatsheet/issues)
+      - [ISSUE_ID]-[LOWERCASED_ISSUE_NAME_SPLIT_BY_HYPHENS]  
+      e.g.: `36-update-locale-readme-for-developers`
+      - Or use "Create a branch" function from GitHub
+   2. Otherwise
+      - Write an [issue on GitHub](https://github.com/PatrickMaul/cheatsheet/issues) and follow 1.
+      - Branch patterns
+        - IDEA-[LOWERCASED_SHORT_DESCRIPTION_SPLIT_BY_HYPHENS]
+        - HOTFIX-[LOWERCASED_SHORT_DESCRIPTION_SPLIT_BY_HYPHENS]
+        - DOC-[LOWERCASED_SHORT_DESCRIPTION_SPLIT_BY_HYPHENS]
 
-In addition, the range is constantly being expanded and updated.
+**Please try following these rules.**
+## Tips for writing a sheet
+### Internal links
+Use `[Link name](?path=path/to/document.md)` to link another file inside `./src/docs/`.
+## How to's
+Here you can find some how-to's you may need during develop.
+### Generate new index
+**The resulting file `indexed_docs_directory.json` should not be pushed.**  
+Open terminal from project directory and use "`node ./src/assets/scripts/indexing_docs_directory.js`" to generate a new index from `src/docs/`.
+## Deployment
+**Only the repo owner and selected co-developers** are authorized to deploy new versions. A new feature can only be built into a new version via a feature branch that was previously merged into the `main`!  
+New versions are built by **merging `main` into `production`**. If necessary, a last commit is pushed to `main`, which at most updates the changelog in `./src/docs/index.md`.
 
-As it is kept for private use only, we ask that you apologize and/or report anything that is invalid or outdated.
+Steps to deploy new versions:
+1. Check changelog, update if necessary.
+     - Commit message => `update: changelog for version [`[SEMANTIC_VERSIONING](https://semver.org/)`]`
+2. Request from `main` to `production`
+     - Merge title => [SEMANTIC_VERSIONING](https://semver.org/)
+3. Merge
+4. Wait for GitHub actions
+   - Automatically triggered when push to `production`
 
-## Changelog
-### 0.1.6 
-Copy code direct via copy button.
+## Testing & Linting
+### Run Unit Tests with [Vitest](https://vitest.dev/)
+```sh
+npm run test:unit
+```
 
-Other changes made:
-- Improvement of fuzzy search
-- Add link to fuse.js docs to search modal footer
-- Smaller style adjustments
-### 0.1.5 [HOTFIX!]
-Remove sensitive data!
+### Lint with [ESLint](https://eslint.org/)
+```sh
+npm run lint
+```
 
-Other changes made:
-- Implement fuzzy search with fuse.js => Need more attention yet!
-- Highlighting search result
-### 0.1.4
-Add build and deployment to github action.
-### 0.1.3
-Indexing documents and  generate keywords from documents, when pushed on `main`.
 
-Other changes made:
-- Prevent scrolling while navigation is open
-- Updating docs
-- Autofocus search bar
-- Outsource buttons code
-- Add recent search
-### 0.1.2
-Adding a search function, available in the navigation
 
-Other changes made:
-- Adding animations to the navigation
-- Sat a maximum size for the content box for a better legibility
-### 0.1.1
-Git Basics and Branches docs added.
-
-Other changes made:
-- Refactoring style rules.
-- Provide markdown file path via url query params.
-- Add Highlight.js to Markdown it
-- Navigation closes when link is clicked or clicked beside navigation.
-### 0.1.0
-The first very sketchy version with all basic implementations made.
+[^1]: [ChatGTP](https://chat.openai.com/chat), Request: "can you describe a cheat sheet for me?" (December 21th, 2022)
