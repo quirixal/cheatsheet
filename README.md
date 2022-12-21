@@ -73,4 +73,4 @@ npm run lint
 
 
 
-[^1]: [ChatGTP](https://chat.openai.com/chat), Request: "can you describe a cheat sheet for me?"
+[^1]: [ChatGTP](https://chat.openai.com/chat), Request: "can you describe a cheat sheet for me?" (December 21th, 2022)
