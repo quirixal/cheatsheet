@@ -6,6 +6,8 @@
   - [Table of contents](#table-of-contents)
   - [Development setup](#development-setup)
   - [Rules for developers](#rules-for-developers)
+  - [Tips for writing a sheet](#tips-for-writing-a-sheet)
+    - [Internal links](#internal-links)
   - [How to's](#how-tos)
     - [Generate new index](#generate-new-index)
   - [Deployment](#deployment)
@@ -42,6 +44,9 @@ Changes **made without** following these rules **will not be merged**.
         - DOC-[LOWERCASED_SHORT_DESCRIPTION_SPLIT_BY_HYPHENS]
 
 **Please try following these rules.**
+## Tips for writing a sheet
+### Internal links
+Use `[Link name](?path=path/to/document.md)` to link another file inside `./src/docs/`.
 ## How to's
 Here you can find some how-to's you may need during develop.
 ### Generate new index
