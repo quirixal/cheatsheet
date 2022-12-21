@@ -1,8 +1,8 @@
-# Cheat sheet | Local
+# Cheat sheet | Readme
 > A cheat sheet is a condensed reference guide that provides quick and easy access to key information on a specific subject or task. Cheat sheets can be particularly useful for learners or professionals who need to quickly refresh their knowledge or learn new skills, as they provide a quick and easy way to access key information in a condensed format.[^1]
 
 ## Table of contents
-- [Cheat sheet | Local](#cheat-sheet-local)
+- [Cheat sheet | Readme](#cheat-sheet--readme)
   - [Table of contents](#table-of-contents)
   - [Development setup](#development-setup)
   - [Rules for developers](#rules-for-developers)
