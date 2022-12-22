@@ -4,12 +4,13 @@ $app-border-radius: 3px;
 $app-border-width: 1px;
 
 // Colors
-$font-color: #eeeeee;
-$primary-color: #d81159;
-$primary-color-lighter: mix(white, $primary-color, 15%);
+$white: #fdfffc;
+$black: #0d0221;
+$primary-color: red;
+$primary-color-lighter: mix(white, $primary-color, 50%);
 $primary-color-darker: mix(black, $primary-color, 20%);
-$secondary-color: #218380;
-$secondary-color-lighter: mix(white, $secondary-color, 15%);
+$secondary-color: darkGreen;
+$secondary-color-lighter: mix(white, $secondary-color, 50%);
 $secondary-color-darker: mix(black, $secondary-color, 20%);
 
 // Navigation drawer

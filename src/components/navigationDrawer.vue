@@ -71,7 +71,12 @@ function emitPath() {
             transform: rotate(-90deg);
             min-width: max-content;
             margin: auto 0;
-            background: linear-gradient(to right, #ffffffbe 0%, white 5%, #ffffffbe 15%);
+            background: linear-gradient(
+                to right,
+                #{$secondary-color-lighter}be 0%,
+                $secondary-color-lighter 5%,
+                #{$secondary-color-lighter}be 15%
+            );
             background-position: 0;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -103,7 +108,6 @@ function emitPath() {
                     margin: 0 0 1rem 0;
                     font-size: 2rem;
                     text-align: center;
-                    color: $font-color;
                     white-space: nowrap;
                 }
             }

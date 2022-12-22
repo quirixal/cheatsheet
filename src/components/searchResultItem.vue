@@ -56,7 +56,6 @@ defineEmits(["updatePath"]);
 
             .chip {
                 background-color: $primary-color;
-                color: $font-color;
                 padding: 4px 8px;
                 border-radius: 1rem;
                 text-align: center;

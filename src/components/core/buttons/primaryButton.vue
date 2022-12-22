@@ -18,7 +18,7 @@ button.primary-button {
     border-radius: $button-border-radius;
 
     background-color: $button-background-color;
-    color: $font-color;
+    color: inherit;
 
     font-size: 16px;
 

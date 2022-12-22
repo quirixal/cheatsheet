@@ -20,7 +20,6 @@ function setPathInURL(path) {
 <style lang="scss" scoped>
 .link-section-wrapper {
     .link-section {
-        color: $font-color;
         .link-section-title {
             margin: 1rem 0 0 0;
         }

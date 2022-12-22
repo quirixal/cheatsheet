@@ -20,6 +20,7 @@ const config = inject("config");
 const states = reactive({
     activeNavigation: false,
     activeSearch: false,
+    lightMode: true,
 });
 
 // Render function
@@ -60,9 +61,23 @@ function closeNavigationAndResetSearchValue() {
     states.searchValue = null;
 }
 
+function toggleTheme(init = false) {
+    if (!init) {
+        states.lightMode = !states.lightMode;
+    }
+    if (states.lightMode) {
+        document.getElementById("app").classList.remove("dark");
+        document.getElementById("app").classList.add("light");
+    } else {
+        document.getElementById("app").classList.add("dark");
+        document.getElementById("app").classList.remove("light");
+    }
+}
+
 onMounted(() => {
     document.addEventListener("DOMContentLoaded", () => {
         renderMarkdownFile();
+        toggleTheme(true);
     });
 });
 </script>
@@ -70,6 +85,7 @@ onMounted(() => {
 <style lang="scss" scoped>
 #content {
     max-width: 900px;
+    min-height: 100vh;
     margin: 0 auto;
     padding: $app-padding;
     padding-left: $navigation-drawer-width-inactive + $app-padding;

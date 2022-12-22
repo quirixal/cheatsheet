@@ -11,6 +11,16 @@ body {
     font-family: "Nunito", sans-serif;
 }
 
+.light {
+    background-color: $white;
+    color: $black;
+}
+
+.dark {
+    background-color: $black;
+    color: $white;
+}
+
 // Typography
 #content {
     h1 {
@@ -72,4 +82,12 @@ hr.divider {
     border: none;
     height: 1px;
     background-color: $primary-color;
+}
+
+// Links
+a {
+    color: $primary-color;
+    &:visited {
+        color: $secondary-color;
+    }
 }
