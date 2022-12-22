@@ -14,10 +14,10 @@ button.primary-button {
     padding: $app-padding;
     min-width: 100%;
 
-    border: $collapse-btn-border solid $collapse-btn-border-color;
-    border-radius: $collapse-btn-border-radius;
+    border: $button-border solid $button-border-color;
+    border-radius: $button-border-radius;
 
-    background-color: $collapse-btn-background-color;
+    background-color: $button-background-color;
     color: $font-color;
 
     font-size: 16px;

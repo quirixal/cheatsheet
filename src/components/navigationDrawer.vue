@@ -5,10 +5,10 @@
 
         .inner-wrapper.flex.column(v-show="props.activeNavigation")
             h2.nav-title.pointer(@click="resetURLState") Cheat sheet
-            primary-button(label="Open search", icon-left="search", @click="emit('update:activeSearch', true)")
+            primary-button.search-btn(label="Open search", icon-left="search", @click="emit('update:activeSearch', true)")
             navigation-list(@path-updated="emitPath")
             .flex-filler
-            primary-button(label="Collapse navigation", icon-left="keyboard_double_arrow_left", icon-right="keyboard_double_arrow_left", @click="closeNavigation")
+            primary-button.collapse-navigation-btn(label="Collapse navigation", icon-left="keyboard_double_arrow_left", icon-right="keyboard_double_arrow_left", @click="closeNavigation")
 </template>
 
 <script setup>
@@ -49,7 +49,7 @@ function emitPath() {
     .content-wrapper {
         width: $navigation-drawer-inner-width-inactive;
         padding: $navigation-drawer-inner-padding;
-        border-right: $navigation-drawer-border-width solid $collapse-btn-border-color;
+        border-right: $navigation-drawer-border-width solid $primary-color-darker;
         position: absolute;
         top: 0;
         bottom: 0;
@@ -105,21 +105,6 @@ function emitPath() {
                     text-align: center;
                     color: $font-color;
                     white-space: nowrap;
-                }
-
-                .open-search-button {
-                    padding: $app-padding;
-
-                    border: $collapse-btn-border solid $collapse-btn-border-color;
-                    border-radius: $collapse-btn-border-radius;
-
-                    background-color: $collapse-btn-background-color;
-                    color: $font-color;
-
-                    font-size: 16px;
-
-                    justify-content: space-around;
-                    align-items: center;
                 }
             }
         }

@@ -22,11 +22,19 @@ function setPathInURL(path) {
     .link-section {
         color: $font-color;
         .link-section-title {
-            margin: 0;
+            margin: 1rem 0 0 0;
         }
         .link-section-links {
+            margin: 0;
+            overflow: hidden;
             padding-left: 16px;
             list-style-type: none;
+
+            .link {
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+            }
         }
     }
 }
