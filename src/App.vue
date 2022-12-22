@@ -29,8 +29,60 @@ async function renderMarkdownFile() {
     const urlQuery = window.location.search.replace("?path=", "");
 
     const path = urlQuery ? "/" + urlQuery : "/src/docs/index.md";
-    const rawReadmeData = (await http.get(path)).data;
-    document.querySelector("main#content").innerHTML = addCopyElementToPreElements(md.render(rawReadmeData));
+    const rawMarkdownFile = (await http.get(path)).data;
+    const preRenderedMarkdownFile = new DOMParser().parseFromString(
+        addCopyElementToPreElements(md.render(rawMarkdownFile)),
+        "text/html"
+    );
+    const siteTitle = preRenderedMarkdownFile.querySelector("h1");
+    const headlines = preRenderedMarkdownFile.querySelectorAll("h2");
+    const subHeadlines = preRenderedMarkdownFile.querySelectorAll("h3");
+    const paragraphs = preRenderedMarkdownFile.querySelectorAll("p");
+    const lists = preRenderedMarkdownFile.querySelectorAll("ul");
+    const codeBlocks = preRenderedMarkdownFile.querySelectorAll("pre");
+    const links = preRenderedMarkdownFile.querySelectorAll("a");
+
+    if (siteTitle) {
+        siteTitle.id = "site-title";
+    }
+    if (headlines) {
+        headlines.forEach((headline) => {
+            headline.classList.add("headline");
+        });
+    }
+    if (subHeadlines) {
+        subHeadlines.forEach((subHeadline) => {
+            subHeadline.classList.add("sub-headline");
+        });
+    }
+    if (paragraphs) {
+        paragraphs.forEach((paragraph) => {
+            paragraph.classList.add("paragraph");
+            paragraph.querySelectorAll("code").forEach((code) => {
+                code.classList.add("inline-code");
+            });
+        });
+    }
+    if (lists) {
+        lists.forEach((list) => {
+            list.classList.add("list");
+            list.querySelectorAll("li").forEach((li) => {
+                li.classList.add("list-item");
+            });
+        });
+    }
+    if (codeBlocks) {
+        codeBlocks.forEach((codeBlock) => {
+            codeBlock.classList.add("code-block");
+        });
+    }
+    if (links) {
+        links.forEach((link) => {
+            link.classList.add("link");
+        });
+    }
+
+    document.querySelector("main#content").innerHTML = preRenderedMarkdownFile.querySelector("body").innerHTML;
 
     const clipboard = new ClipboardJs(".clipboard", {
         text: (preIconElement) => {
@@ -44,7 +96,6 @@ async function renderMarkdownFile() {
             e.trigger.innerText = "content_copy";
         }, 1000);
     });
-
     clipboard.on("error", (e) => {
         console.log("copy error", e);
     });
