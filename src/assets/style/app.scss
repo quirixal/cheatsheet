@@ -21,9 +21,11 @@ body {
     color: $white;
 }
 
-// Typography
+// Markdown files
 #content {
-    h1 {
+    #site-title {
+        margin: 2rem 0 1.5rem 0;
+
         &:after {
             content: "";
             display: block;
@@ -31,15 +33,40 @@ body {
             background-color: #000;
         }
     }
-
-    pre {
+    .headline {
+        margin: 1.5rem 0 0.9rem 0;
+    }
+    .sub-headline {
+        margin: 1rem 0 0.5rem 0;
+    }
+    .paragraph {
+        margin: 0.3rem 0 0.3rem 0;
+    }
+    .list {
+        margin: 0.3rem 0 0.3rem 0;
+    }
+    .code-block {
         border-radius: $app-border-radius;
         padding: $app-padding;
         background-color: #cccccc;
+        margin: 0.3rem 0 0.3rem 0;
         code {
             font-size: 12px;
             font-family: "Roboto Mono", monospace;
         }
+    }
+    .inline-code {
+        color: orange;
+        font-size: 12px;
+        font-weight: 600;
+        font-family: "Roboto Mono", monospace;
+    }
+}
+// Links
+a {
+    color: $primary-color;
+    &:visited {
+        color: $secondary-color;
     }
 }
 
@@ -55,9 +82,12 @@ body {
         flex: 1;
     }
 }
-
 .pointer {
     cursor: pointer;
+}
+hr.divider {
+    height: 1px;
+    background-color: $primary-color;
 }
 
 // Code blocks
@@ -76,18 +106,5 @@ pre {
         .material-symbols-outlined {
             display: block;
         }
-    }
-}
-hr.divider {
-    border: none;
-    height: 1px;
-    background-color: $primary-color;
-}
-
-// Links
-a {
-    color: $primary-color;
-    &:visited {
-        color: $secondary-color;
     }
 }
