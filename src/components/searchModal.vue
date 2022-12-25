@@ -170,6 +170,7 @@ watch(props, (props) => {
     if (props.active) {
         const loadedRecentSearch = loadRecentSearch();
         if (data.recentSearch != loadedRecentSearch) data.recentSearch = loadedRecentSearch;
+        else if (!loadedRecentSearch) data.recentSearch = [];
     }
 });
 
