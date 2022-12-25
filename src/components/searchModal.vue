@@ -187,6 +187,7 @@ onMounted(() => {
     width: 100vw;
     height: 100vh;
     background-color: $navigation-drawer-background-color; // dark semi-transparent
+    color: $black;
 
     .card {
         margin: auto;
@@ -210,7 +211,6 @@ onMounted(() => {
                 border: none;
                 span.material-symbols-outlined {
                     font-size: 30px;
-                    color: $primary-color;
                 }
             }
             .card-title {
@@ -221,6 +221,10 @@ onMounted(() => {
                 width: 100%;
                 font-size: 18px;
                 padding: $app-padding;
+
+                &:focus {
+                    outline-color: $primary-color-lighter;
+                }
             }
         }
         .card-body {
@@ -251,7 +255,6 @@ onMounted(() => {
                 background-color: #ffffff;
                 .help-link {
                     height: 24px;
-                    color: inherit;
                 }
             }
         }
