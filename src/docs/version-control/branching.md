@@ -2,7 +2,7 @@
 [preservedKeywords]: <> (git, branching, branch, create, delete, checkout, rebase, reset)
 # Git - Branching
 ## Git Basics
-Please have a look into [Git Basics](?path=src/docs/git/basics.md) section.
+Please have a look into [Git Basics](?path=src/docs/version-control/basics.md) section.
 
 ## Branches
 Git uses branches to isolate your working code from new feature development. Thanks to branching in git you can work an different feature isolated, each in its own branch.
