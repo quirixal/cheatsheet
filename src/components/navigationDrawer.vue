@@ -8,6 +8,7 @@
             primary-button.search-btn(label="Open search", icon-left="search", @click="emit('update:activeSearch', true)")
             navigation-list(@path-updated="emitPath")
             .flex-filler
+            primary-button.theme-switch-btn(label="Switch theme", icon-right="brightness_4", icon-left="brightness_4", @click="emit('update:appTheme')")
             primary-button.collapse-navigation-btn(label="Collapse navigation", icon-left="keyboard_double_arrow_left", icon-right="keyboard_double_arrow_left", @click="closeNavigation")
 </template>
 
@@ -15,10 +16,11 @@
 // Components
 import navigationList from "./navigationList.vue";
 import primaryButton from "./core/buttons/primaryButton.vue";
+import { computed } from "@vue/runtime-core";
 
 // Defining props & emits
 const props = defineProps(["activeNavigation", "activeSearch"]);
-const emit = defineEmits(["pathUpdated", "update:activeNavigation", "update:activeSearch"]);
+const emit = defineEmits(["pathUpdated", "update:activeNavigation", "update:appTheme", "update:activeSearch"]);
 
 // Functions
 function closeNavigation() {
