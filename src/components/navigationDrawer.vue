@@ -45,7 +45,7 @@ function emitPath() {
     z-index: 10;
 
     background: $navigation-drawer-background-color;
-
+    color: $white;
     .content-wrapper {
         width: $navigation-drawer-inner-width-inactive;
         padding: $navigation-drawer-inner-padding;
