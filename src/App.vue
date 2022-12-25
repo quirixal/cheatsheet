@@ -34,7 +34,7 @@ async function renderMarkdownFile() {
         addCopyElementToPreElements(md.render(rawMarkdownFile)),
         "text/html"
     );
-    const siteTitle = preRenderedMarkdownFile.querySelector("h1");
+    const siteTitleElement = preRenderedMarkdownFile.querySelector("h1");
     const headlines = preRenderedMarkdownFile.querySelectorAll("h2");
     const subHeadlines = preRenderedMarkdownFile.querySelectorAll("h3");
     const paragraphs = preRenderedMarkdownFile.querySelectorAll("p");
@@ -42,9 +42,11 @@ async function renderMarkdownFile() {
     const codeBlocks = preRenderedMarkdownFile.querySelectorAll("pre");
     const links = preRenderedMarkdownFile.querySelectorAll("a");
 
-    if (siteTitle) {
-        siteTitle.id = "site-title";
-    }
+    if (siteTitleElement) {
+        siteTitleElement.id = "site-title";
+        const siteTitle = siteTitleElement.innerText;
+        document.title = siteTitle === "Cheat sheet" ? `${siteTitle} | Home` : `Cheat sheet | ${siteTitle}`;
+    } else document.title = "Cheat sheet | Doc";
     if (headlines) {
         headlines.forEach((headline) => {
             headline.classList.add("headline");
