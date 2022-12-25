@@ -113,6 +113,10 @@ function emitPath() {
                     white-space: nowrap;
                 }
             }
+
+            .theme-switch-btn {
+                margin: 0 0 0.5rem 0;
+            }
         }
     }
 }

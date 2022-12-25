@@ -187,6 +187,7 @@ onMounted(() => {
     width: 100vw;
     height: 100vh;
     background-color: $navigation-drawer-background-color; // dark semi-transparent
+    color: $black;
 
     .card {
         margin: auto;

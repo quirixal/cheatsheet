@@ -33,7 +33,7 @@ defineEmits(["updatePath"]);
     .result-item-content {
         .result-item-description {
             margin: 0;
-            max-width: 75%;
+            max-width: 73%;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
@@ -61,6 +61,7 @@ defineEmits(["updatePath"]);
                 text-align: center;
                 white-space: nowrap;
                 width: max-content;
+                color: $white;
             }
         }
     }
