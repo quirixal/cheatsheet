@@ -7,6 +7,13 @@ In addition, the range is constantly being expanded and updated.
 As it is kept for private use only, we ask that you apologize and/or report anything that is invalid or outdated.
 
 ## Changelog
+### 0.2.1
+Change stylings.
+
+Other changes made:
+- Update Document title
+- Fix recent search
+
 ### 0.2.0
 Move index page content into `docs/index.md`, depending on these changes the indexing script has changed.
 

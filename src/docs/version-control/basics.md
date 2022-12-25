@@ -65,7 +65,7 @@ git checkout -- <filename>
 ```
 
 ## Branches
-Please have a look into [Branching](?path=src/docs/git/branching.md) for deeper explanation.
+Please have a look into [Branching](?path=src/docs/version-control/branching.md) for deeper explanation.
 
 ### Merge one branch into another
 To take all commits from one branch into another one, user the merge command.

@@ -1,5 +1,5 @@
 <template lang="pug">
-navigation-drawer(v-model:activeSearch="states.activeSearch", v-model:activeNavigation="states.activeNavigation", @path-updated="renderMarkdownFile()")
+navigation-drawer(v-model:activeSearch="states.activeSearch", v-model:activeNavigation="states.activeNavigation", @path-updated="renderMarkdownFile()", @update:appTheme="toggleTheme()")
 search-modal(v-model:active="states.activeSearch", @close-navigation="closeNavigationAndResetSearchValue" @path-updated="renderMarkdownFile()")
 main#content(:class="{'no-scroll':states.activeNavigation}")
 </template>
@@ -20,6 +20,7 @@ const config = inject("config");
 const states = reactive({
     activeNavigation: false,
     activeSearch: false,
+    lightMode: true,
 });
 
 // Render function
@@ -28,8 +29,62 @@ async function renderMarkdownFile() {
     const urlQuery = window.location.search.replace("?path=", "");
 
     const path = urlQuery ? "/" + urlQuery : "/src/docs/index.md";
-    const rawReadmeData = (await http.get(path)).data;
-    document.querySelector("main#content").innerHTML = addCopyElementToPreElements(md.render(rawReadmeData));
+    const rawMarkdownFile = (await http.get(path)).data;
+    const preRenderedMarkdownFile = new DOMParser().parseFromString(
+        addCopyElementToPreElements(md.render(rawMarkdownFile)),
+        "text/html"
+    );
+    const siteTitleElement = preRenderedMarkdownFile.querySelector("h1");
+    const headlines = preRenderedMarkdownFile.querySelectorAll("h2");
+    const subHeadlines = preRenderedMarkdownFile.querySelectorAll("h3");
+    const paragraphs = preRenderedMarkdownFile.querySelectorAll("p");
+    const lists = preRenderedMarkdownFile.querySelectorAll("ul");
+    const codeBlocks = preRenderedMarkdownFile.querySelectorAll("pre");
+    const links = preRenderedMarkdownFile.querySelectorAll("a");
+
+    if (siteTitleElement) {
+        siteTitleElement.id = "site-title";
+        const siteTitle = siteTitleElement.innerText;
+        document.title = siteTitle === "Cheat sheet" ? `${siteTitle} | Home` : `Cheat sheet | ${siteTitle}`;
+    } else document.title = "Cheat sheet | Doc";
+    if (headlines) {
+        headlines.forEach((headline) => {
+            headline.classList.add("headline");
+        });
+    }
+    if (subHeadlines) {
+        subHeadlines.forEach((subHeadline) => {
+            subHeadline.classList.add("sub-headline");
+        });
+    }
+    if (paragraphs) {
+        paragraphs.forEach((paragraph) => {
+            paragraph.classList.add("paragraph");
+            paragraph.querySelectorAll("code").forEach((code) => {
+                code.classList.add("inline-code");
+            });
+        });
+    }
+    if (lists) {
+        lists.forEach((list) => {
+            list.classList.add("list");
+            list.querySelectorAll("li").forEach((li) => {
+                li.classList.add("list-item");
+            });
+        });
+    }
+    if (codeBlocks) {
+        codeBlocks.forEach((codeBlock) => {
+            codeBlock.classList.add("code-block");
+        });
+    }
+    if (links) {
+        links.forEach((link) => {
+            link.classList.add("link");
+        });
+    }
+
+    document.querySelector("main#content").innerHTML = preRenderedMarkdownFile.querySelector("body").innerHTML;
 
     const clipboard = new ClipboardJs(".clipboard", {
         text: (preIconElement) => {
@@ -43,7 +98,6 @@ async function renderMarkdownFile() {
             e.trigger.innerText = "content_copy";
         }, 1000);
     });
-
     clipboard.on("error", (e) => {
         console.log("copy error", e);
     });
@@ -60,9 +114,23 @@ function closeNavigationAndResetSearchValue() {
     states.searchValue = null;
 }
 
+function toggleTheme(init = false) {
+    if (!init) {
+        states.lightMode = !states.lightMode;
+    }
+    if (states.lightMode) {
+        document.getElementById("app").classList.remove("dark");
+        document.getElementById("app").classList.add("light");
+    } else {
+        document.getElementById("app").classList.add("dark");
+        document.getElementById("app").classList.remove("light");
+    }
+}
+
 onMounted(() => {
     document.addEventListener("DOMContentLoaded", () => {
         renderMarkdownFile();
+        toggleTheme(true);
     });
 });
 </script>
@@ -70,6 +138,7 @@ onMounted(() => {
 <style lang="scss" scoped>
 #content {
     max-width: 900px;
+    min-height: 100vh;
     margin: 0 auto;
     padding: $app-padding;
     padding-left: $navigation-drawer-width-inactive + $app-padding;
