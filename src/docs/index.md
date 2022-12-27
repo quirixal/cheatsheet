@@ -10,14 +10,19 @@ Since the cheat sheet was developed for private use only, we apologize for any i
 
 ## Changelog
 Records the history of all changes made to the project.
-### 0.3.0 => Currently under development
+### 0.3.1 => Currently under development
 Will hopefully be deployed on **29th December, 2022**
 
 Upcoming features:
-- Updated `index.md`
 - Fragments beside each `headline` or `sub-headline`
-- New imprint page
 - Fixed navigation drawer animation
+### 0.3.0
+Added `imprint.md`, depending on these changes the indexing script has changed.
+
+Other changes made:
+- Updated `index.md`
+
+Version `0.3.0` was deployed on **27th December, 2022**
 ### 0.2.1
 Styles have been adjusted, but these are still under development. Adjustments have been made to the spacing in the rendered markdown files and to the colors.
 
