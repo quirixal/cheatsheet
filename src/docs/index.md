@@ -10,7 +10,7 @@ Since the cheat sheet was developed for private use only, we apologize for any i
 
 ## Changelog
 Records the history of all changes made to the project.
-### 0.2.2 => Currently under development
+### 0.3.0 => Currently under development
 Will hopefully be deployed on **29th December, 2022**
 
 Upcoming features:
