@@ -110,7 +110,7 @@ function addAttributes(preRenderedMarkdownFile) {
 
                 if (config.children) {
                     config.children.forEach((child) => {
-                        const childElements = preRenderedMarkdownFile.querySelectorAll(child.elementTag);
+                        const childElements = element.querySelectorAll(child.elementTag);
                         childElements.forEach((childElement) => {
                             childElement.classList.add(child.class);
                         });
