@@ -11,6 +11,10 @@ body {
     font-family: "Nunito", sans-serif;
 }
 
+#app {
+    min-height: 100vh;
+}
+
 .light {
     background-color: $white;
     color: $black;
@@ -73,10 +77,30 @@ body {
         margin: 0.3rem 0 0.3rem 0;
     }
     .code-block {
+        max-width: 100%;
         border-radius: $app-border-radius;
         padding: $app-padding;
         background-color: #cccccc;
         margin: 0.3rem 0 0.3rem 0;
+        color: $black;
+
+        position: relative;
+        overflow-y: scroll;
+
+        .clipboard {
+            display: none;
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            cursor: pointer;
+        }
+
+        &:hover {
+            .clipboard {
+                display: block;
+            }
+        }
+
         code {
             font-size: 12px;
             font-family: "Roboto Mono", monospace;
@@ -115,23 +139,4 @@ a:not(.fragment-link) {
 hr.divider {
     height: 1px;
     background-color: $primary-color;
-}
-
-// Code blocks
-pre {
-    position: relative;
-
-    .material-symbols-outlined {
-        display: none;
-        position: absolute;
-        top: 4px;
-        right: 4px;
-        cursor: pointer;
-    }
-
-    &:hover {
-        .material-symbols-outlined {
-            display: block;
-        }
-    }
 }

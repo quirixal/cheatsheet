@@ -12,7 +12,6 @@ defineProps(["label", "iconLeft", "iconRight"]);
 <style lang="scss" scoped>
 button.primary-button {
     padding: $app-padding;
-    min-width: 100%;
 
     border: $button-border solid $button-border-color;
     border-radius: $button-border-radius;

@@ -14,7 +14,7 @@ $secondary-color-lighter: mix(white, $secondary-color, 50%);
 $secondary-color-darker: mix(black, $secondary-color, 20%);
 
 // Navigation drawer
-$navigation-drawer-inner-width-inactive: 56px;
+$navigation-drawer-width: 56px;
 $navigation-drawer-inner-padding: $app-padding;
 $navigation-drawer-inner-border-width: 2px;
 $navigation-drawer-inner-background-color: $primary-color;
@@ -22,11 +22,22 @@ $navigation-drawer-inner-background-color: $primary-color;
 $navigation-drawer-background-color: #22222280;
 $navigation-drawer-padding: $app-padding;
 $navigation-drawer-border-width: 2px;
-$navigation-drawer-width-inactive: $navigation-drawer-inner-width-inactive + $navigation-drawer-inner-border-width +
+$navigation-drawer-width-inactive: $navigation-drawer-width + $navigation-drawer-inner-border-width +
     $navigation-drawer-inner-padding * 2;
+
+$navigation-drawer-tools-height: 46px;
+$navigation-drawer-legals-padding-top: 5px;
+$navigation-drawer-legals-height: 32px;
+
+$navigation-drawer-subtrahend: $navigation-drawer-width + $navigation-drawer-tools-height + (2 * $app-padding) +
+    $navigation-drawer-legals-height + $navigation-drawer-legals-padding-top;
 
 // Buttons
 $button-border: 1px;
 $button-border-radius: 1.5rem;
 $button-background-color: transparent;
 $button-border-color: $secondary-color-darker;
+
+// Content
+$content-max-width: 900px;
+$content-padding: $app-padding $app-padding $app-padding * 3 $app-padding;

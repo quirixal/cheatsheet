@@ -189,14 +189,13 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 #content {
-    max-width: 900px;
-    min-height: 100vh;
-    margin: 0 auto;
-    padding: $app-padding;
-    padding-left: $navigation-drawer-width-inactive + $app-padding;
+    max-width: $content-max-width;
+    padding: $content-padding;
+    margin: auto;
 
     &.no-scroll {
-        height: calc(100vh - $app-padding * 2);
+        height: 0;
+        padding: 0;
         overflow: hidden;
     }
 }

@@ -19,6 +19,8 @@ function setPathInURL(path) {
 
 <style lang="scss" scoped>
 .link-section-wrapper {
+    height: calc(100vh - $navigation-drawer-subtrahend);
+    overflow-y: scroll;
     .link-section {
         .link-section-title {
             margin: 1rem 0 0 0;
