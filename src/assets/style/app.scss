@@ -140,3 +140,8 @@ hr.divider {
     height: 1px;
     background-color: $primary-color;
 }
+.text-ellipsis {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}

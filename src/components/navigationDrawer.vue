@@ -1,27 +1,25 @@
 <template lang="pug">
 #navigation-drawer(:class="{'active':props.activeNavigation}")
     .top-bar.flex
-        h2.nav-title.pointer(@click="resetURLState") Cheat sheet
-        .flex-filler 
-        button.burger-menu(@click="emit('update:activeNavigation', !props.activeNavigation);")
-            span.material-symbols-outlined menu
+        h2.nav-title.pointer.text-ellipsis(@click="resetURLState") Cheat sheet
+        .flex-filler
+        circleIconButton.burger-menu(:icon="'menu'", :tooltip="'Open menu'", icon-size-class="large", @click="emit('update:activeNavigation', !props.activeNavigation);")
+    
     .expansion-bar
         .tools.flex
-            button.circle-btn.flex.pointer(@click="emit('update:activeSearch', true)")
-                span.material-symbols-outlined search
+            circleIconButton.search-button(:icon="'search'", :tooltip="'Open Search'", icon-size-class="large", @click="emit('update:activeSearch', true)")
             .flex-filler
-            button.circle-btn.pointer.flex(@click="toggleTheme()")
-                span.material-symbols-outlined brightness_4
+            circleIconButton.theme-switch(:icon="'brightness_4'", :tooltip="'Switch theme'", icon-size-class="large",  @click="toggleTheme")
+        
         navigation-list(@path-updated="emitPath")
         .legals.flex
-            a(href="?path=src/docs/imprint.md") Imprint
+            a.text-ellipsis(href="?path=src/docs/imprint.md") Imprint
 </template>
 
 <script setup>
 // Components
 import navigationList from "./navigationList.vue";
-import primaryButton from "./core/buttons/primaryButton.vue";
-import { computed } from "@vue/runtime-core";
+import circleIconButton from "./core/buttons/circleIconButton.vue";
 
 // Defining props & emits
 const props = defineProps(["activeNavigation", "activeSearch"]);
@@ -33,8 +31,7 @@ function closeNavigation() {
 }
 function resetURLState() {
     window.history.replaceState(null, document.title, "/cheetsheet/");
-    closeNavigation();
-    emit("pathUpdated");
+    emitPath();
 }
 function emitPath() {
     closeNavigation();
@@ -62,17 +59,6 @@ function toggleTheme() {
 
         .nav-title {
             margin: 0;
-        }
-
-        .burger-menu {
-            border: none;
-            background: none;
-            color: inherit;
-            cursor: pointer;
-
-            span {
-                font-size: 2rem;
-            }
         }
     }
 
@@ -104,8 +90,11 @@ function toggleTheme() {
             padding-top: $navigation-drawer-legals-padding-top;
 
             border-top: $app-border-width solid $white;
+            align-content: center;
             a {
-                margin: auto;
+                width: 100%;
+                height: max-content;
+                text-align: center;
                 color: inherit;
                 text-decoration: none;
             }
