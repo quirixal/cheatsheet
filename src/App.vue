@@ -1,7 +1,8 @@
 <template lang="pug">
 navigation-drawer(v-model:activeSearch="states.activeSearch", v-model:activeNavigation="states.activeNavigation", @path-updated="renderMarkdownFile()", @update:appTheme="toggleTheme()")
 search-modal(v-model:active="states.activeSearch", @close-navigation="closeNavigationAndResetSearchValue" @path-updated="renderMarkdownFile()")
-main#content(:class="{'no-scroll':states.activeNavigation}")
+main(v-show="!states.activeNavigation")
+    #rendered-markdown-file
 </template>
 
 <script setup>
@@ -39,6 +40,10 @@ function addFragments(preRenderedMarkdownFile) {
             link.href = `#${element.id}`;
             link.classList.add("fragment-link");
             link.append(copiedElement);
+
+            let filler = document.createElement("div");
+            filler.classList.add("flex-filler");
+            link.append(filler);
 
             const fragment = document.createElement("span");
             fragment.classList.add("material-symbols-outlined");
@@ -136,7 +141,8 @@ async function renderMarkdownFile() {
     preRenderedMarkdownFile = addAttributes(preRenderedMarkdownFile);
     preRenderedMarkdownFile = addFragments(preRenderedMarkdownFile);
 
-    document.querySelector("main#content").innerHTML = preRenderedMarkdownFile.querySelector("body").innerHTML;
+    document.querySelector("main #rendered-markdown-file").innerHTML =
+        preRenderedMarkdownFile.querySelector("body").innerHTML;
 
     const clipboard = new ClipboardJs(".clipboard", {
         text: (preIconElement) => {
@@ -188,15 +194,9 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-#content {
-    max-width: $content-max-width;
-    padding: $content-padding;
+#rendered-markdown-file {
+    max-width: $cs-rmf-max-width;
+    padding: $cs-rmf-padding;
     margin: auto;
-
-    &.no-scroll {
-        height: 0;
-        padding: 0;
-        overflow: hidden;
-    }
 }
 </style>

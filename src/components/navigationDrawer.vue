@@ -1,15 +1,19 @@
 <template lang="pug">
 #navigation-drawer(:class="{'active':props.activeNavigation}")
     .top-bar.flex
+        circleIconButton.burger-menu(:icon="'menu'", :tooltip="'Open menu'", icon-size-class="large", @click="emit('update:activeNavigation', !props.activeNavigation);")
         h2.nav-title.pointer.text-ellipsis(@click="resetURLState") Cheat sheet
         .flex-filler
-        circleIconButton.burger-menu(:icon="'menu'", :tooltip="'Open menu'", icon-size-class="large", @click="emit('update:activeNavigation', !props.activeNavigation);")
+        circleIconButton.theme-switch(:icon="'brightness_4'", :tooltip="'Switch theme'", icon-size-class="large",  @click="toggleTheme")
+        circleIconButton.search-button(:icon="'search'", :tooltip="'Open Search'", icon-size-class="large", @click="emit('update:activeSearch', true)")
     
     .expansion-bar
-        .tools.flex
-            circleIconButton.search-button(:icon="'search'", :tooltip="'Open Search'", icon-size-class="large", @click="emit('update:activeSearch', true)")
-            .flex-filler
-            circleIconButton.theme-switch(:icon="'brightness_4'", :tooltip="'Switch theme'", icon-size-class="large",  @click="toggleTheme")
+        //- For toolbox uncomment following lines
+        //- these file [15f.] $ [74ff.]
+        //- _variable.scss [19] & [22]
+
+        //- .tools.flex
+        //-     .flex-filler
         
         navigation-list(@path-updated="emitPath")
         .legals.flex
@@ -48,50 +52,38 @@ function toggleTheme() {
     width: 100%;
     max-width: 100vw;
 
-    background: $navigation-drawer-inner-background-color;
-    color: $white;
+    background: $cs-nd-inner-background-color;
+    color: $cs-white;
 
     .top-bar {
-        height: $navigation-drawer-width;
-        padding: $app-padding;
+        height: $cs-nd-height;
+        padding: $cs-padding;
 
         align-items: center;
 
         .nav-title {
-            margin: 0;
+            margin: 0 0 0 1rem;
         }
     }
 
     .expansion-bar {
         height: 0;
-        padding: $app-padding;
+        padding: $cs-padding;
         display: none;
 
-        .tools {
-            height: $navigation-drawer-tools-height;
-            .circle-btn {
-                border: none;
-                background: none;
-                color: inherit;
-                height: 46px;
-                width: 46px;
-                border-radius: 1.5rem;
-
-                span.material-symbols-outlined {
-                    margin: auto;
-                    font-size: 2rem;
-                }
-            }
-        }
+        // .tools {
+        //     height: $cs-nd-tools-height;
+        // }
 
         .legals {
             box-sizing: content-box;
-            height: $navigation-drawer-legals-height;
-            padding-top: $navigation-drawer-legals-padding-top;
+            height: $cs-nd-legals-height;
+            padding-top: $cs-nd-legals-padding-top;
 
-            border-top: $app-border-width solid $white;
+            border-top: $cs-border-width solid $cs-white;
             align-content: center;
             a {
+                margin: auto 0;
                 width: 100%;
                 height: max-content;
                 text-align: center;
@@ -104,7 +96,7 @@ function toggleTheme() {
     // Active Navigation
     &.active {
         .expansion-bar {
-            height: calc(100vh - $navigation-drawer-width);
+            height: calc(100vh - $cs-nd-height);
             display: block;
         }
     }
