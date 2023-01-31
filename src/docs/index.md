@@ -10,14 +10,18 @@ Since the cheat sheet was developed for private use only, we apologize for any i
 
 ## Changelog
 Records the history of all changes made to the project.
-### 0.3.4 => Currently under development
+### 0.3.5 => Currently under development
 Upcoming features:
 - Scrolling inside code blocks fixed
 - Writing tests and adding github action
 - A few changes to the repository 
 - Hopefully new docs
+### 0.3.4
+New docs for python packaging.
+
+Version `0.3.4` was deployed on **31th January, 2023**
 ### 0.3.3
-New docs for Python venv's.
+New docs for python venv's.
 
 Version `0.3.3` was deployed on **25th January, 2023**
 ### 0.3.2
