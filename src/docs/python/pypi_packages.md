@@ -1,7 +1,7 @@
 [description]: <> (How to write your own PyPi package.)
 [preservedKeywords]: <> (python, pypi, write your own)
 
-# PyPi
+# PyPi Packages
 > The Python Package Index (PyPI) is a repository of software for the Python programming language. PyPI helps you find and install software developed and shared by the Python community.
 
 ## Pre-requirements
