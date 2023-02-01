@@ -1,55 +1,58 @@
-// Import all needed stuff
+// Import everything needed
 const fs = require("fs");
 const path = require("path");
 const lemmatizer = require("node-lemmatizer");
 const natural = require("natural");
 
-// Initialize needed variables / constance's
+// This is the "result" array
 const indexedDocs = [];
 
-// Read base directory
+// Read base directory "./src/docs"
 const docsBasePath = "./src/docs";
 let docsDirectoryContent = fs.readdirSync(docsBasePath);
-console.log(`Has read '${docsBasePath}'`);
+console.log(`Read base directory => ${docsBasePath}`);
+console.log(`======================================`);
 
-// Remove files
-docsDirectoryContent = removeFilesFromDocsDir(docsDirectoryContent);
-console.log(`Found subdirectories in '${docsBasePath}': ${docsDirectoryContent}`);
-
-docsDirectoryContent = docsDirectoryContent.map((subDirectory) => {
-    if (fs.lstatSync(`${docsBasePath}/${subDirectory}`).isDirectory()) return `${docsBasePath}/${subDirectory}`;
+// Find all subdirectories in "./src/docs"
+let subdirectoryPaths = findSubdirectories(docsDirectoryContent);
+console.log(`Found subdirectories: ${subdirectoryPaths}`);
+subdirectoryPaths = subdirectoryPaths.map((subdirectory) => {
+    return `${docsBasePath}/${subdirectory}`;
 });
+console.log(`======================================`);
 
 // Read subdirectories
-docsDirectoryContent.forEach((subDirectory) => {
-    const subDirectoryDocuments = fs.readdirSync(subDirectory);
-    console.log(`Found documents in '${subDirectory}': ${subDirectoryDocuments}`);
+subdirectoryPaths.forEach((subdirectory) => {
+    const subdirectoryDocuments = fs.readdirSync(subdirectory);
+    console.log(`Current subdirectory => ${subdirectory}`);
+    console.log(`Found documents: ${subdirectoryDocuments}`);
 
-    let indexedSubDirectoryDocuments = [];
+    let indexedSubdirectoryDocuments = [];
 
-    // Read all documents in subdirectory
-    for (const document of subDirectoryDocuments) {
+    // Read all documents inside the subdirectory
+    for (const document of subdirectoryDocuments) {
         // Only markdown files
-        if (fs.lstatSync(`${subDirectory}/${document}`).isFile() && path.extname(document) === ".md") {
-            const indexedFile = indexingDocument(`${subDirectory}/${document}`);
-            indexedSubDirectoryDocuments.push(indexedFile);
-            console.log(`Document '${document}' in '${subDirectory}' indexed.`);
+        let filePath = `${subdirectory}/${document}`;
+        if (fs.lstatSync(filePath).isFile() && path.extname(document) === ".md") {
+            const indexedFile = indexingDocument(filePath);
+            indexedSubdirectoryDocuments.push(indexedFile);
+            console.log(`Successfully indexed => ${subdirectory}/${document}`);
         }
     }
     indexedDocs.push({
-        title: formatTitle(subDirectory.replace("./src/docs/", "")),
-        links: indexedSubDirectoryDocuments,
+        title: formatTitle(subdirectory.replace("./src/docs/", "")),
+        links: indexedSubdirectoryDocuments,
     });
+    console.log(`======================================`);
 });
 
 // Write into file
 fs.writeFileSync("./src/assets/json/indexed_docs_directory.json", JSON.stringify(indexedDocs));
 
-function removeFilesFromDocsDir(docsDir) {
+function findSubdirectories(docsDir) {
     const result = [];
     docsDir.forEach((x) => {
         if (fs.lstatSync(`${docsBasePath}/${x}`).isDirectory()) result.push(x);
-        else console.log(`Removed: ${x}`);
     });
     return result;
 }
@@ -96,27 +99,23 @@ function loadDocumentTitle(documentLines) {
 
 function loadDocumentDescription(documentLines) {
     // Load just the description from a document. Description is line with '[description]: <> '
-    for (let i = 0; i < documentLines.length; i++) {
-        const line = documentLines[i];
-        const lineIsDescription = line.includes("[description]: <> ");
+    const line = documentLines[0];
+    const lineIsDescription = line.includes("[description]: <> ");
 
-        if (lineIsDescription) {
-            const extractedDescription = line.match(/(?<=\().+(?=\))/);
-            return extractedDescription ? extractedDescription[0] : null;
-        }
+    if (lineIsDescription) {
+        const extractedDescription = line.match(/(?<=\().+(?=\))/);
+        return extractedDescription ? extractedDescription[0] : null;
     }
 }
 
 function loadDocumentPreservedKeywords(documentLines) {
     // Load just the preservedKeywords from a document. PreservedKeywords is line with '[preservedKeywords]: <> '
-    for (let i = 0; i < documentLines.length; i++) {
-        const line = documentLines[i];
-        const lineIsPreservedKeywords = line.includes("[preservedKeywords]: <> ");
+    const line = documentLines[1];
+    const lineIsPreservedKeywords = line.includes("[preservedKeywords]: <> ");
 
-        if (lineIsPreservedKeywords) {
-            const extractedPreservedKeywords = line.match(/(?<=\().+(?=\))/);
-            return extractedPreservedKeywords ? extractedPreservedKeywords[0].split(", ") : null;
-        }
+    if (lineIsPreservedKeywords) {
+        const extractedPreservedKeywords = line.match(/(?<=\().+(?=\))/);
+        return extractedPreservedKeywords ? extractedPreservedKeywords[0].split(", ") : null;
     }
 }
 
@@ -126,21 +125,27 @@ function loadDocumentPreservedKeywords(documentLines) {
 
 function generateKeywordsFromDocument(documentContent, maxKeywords = null) {
     // Generate keywords from document content
-    // 1. Lowercase the whole document
+    // 1. Lowercase whole document
     documentContent = documentContent.toLowerCase();
-    // 2. Tokenize content, remove all non word signs and everything with numbers
+    // 2. Tokenize content, remove all non word signs and numbers
     let tokens = tokenizeDocumentContent(documentContent);
+    // 3. Get the POS for each word
+    // What word is it? Nouns, Verbs etc.
     tokens = partOfSpeech(tokens);
+    // 4. Change each word into it's base form
     let lemmatizedTokens = lemmatizeTokens(tokens);
-    lemmatizedTokens = removeStopWords(lemmatizedTokens);
-    let termFrequencyTokens = calculateTermFrequency(lemmatizedTokens);
+    // 5. Remove all english stop words, like: i, you, on, in, etc.
+    let lemmatizedTokensWithoutStopWords = removeStopWords(lemmatizedTokens);
+    // 6. Calculate the term frequency inside its own file
+    let termFrequencyTokens = calculateTermFrequency(lemmatizedTokensWithoutStopWords);
+    // 7. Calculate the term frequency inside all files
     termFrequencyTokens = calculateDocumentFrequency(termFrequencyTokens);
-
+    // 8. Return only the best matching keywords
     return getBestKeywords(termFrequencyTokens, maxKeywords);
 }
 
 function tokenizeDocumentContent(document) {
-    // Simply split the text, and isolates each word. Removes and digit
+    // Split the text and isolates each word
     let tokenizedDocument = document.split(/[ ,\\[\]:().#?*+`\\/{}";\n<>=!]/g);
 
     let result = [];
@@ -165,14 +170,14 @@ function partOfSpeech(tokens) {
     const defaultCategory = "N"; // N => noun
 
     var lexicon = new natural.Lexicon(language, defaultCategory);
-    var ruleSet = new natural.RuleSet("EN");
+    var ruleSet = new natural.RuleSet(language);
     var tagger = new natural.BrillPOSTagger(lexicon, ruleSet);
 
     return tagger.tag(tokens);
 }
 
 function lemmatizeTokens(content) {
-    // Lemmatize tokens. all words will be set to their base => dogs > dog
+    // Lemmatize tokens, all words will be set to their base => dogs > dog
     let result = [];
     content.taggedWords.forEach((word) => {
         if (["N", "NN", "NNS", "NNP", "NNPS"].includes(word.tag)) {
@@ -264,14 +269,15 @@ function calculateTermFrequency(content) {
 
 function calculateDocumentFrequency(tokens) {
     // Read subdirectories
-    docsDirectoryContent.forEach((subDirectory) => {
-        const subDirectoryDocuments = fs.readdirSync(subDirectory);
+    subdirectoryPaths.forEach((subdirectory) => {
+        const subdirectoryDocuments = fs.readdirSync(subdirectory);
 
         // Read all documents in subdirectory
-        for (const document of subDirectoryDocuments) {
+        for (const document of subdirectoryDocuments) {
             // Only markdown files
-            if (fs.lstatSync(`${subDirectory}/${document}`).isFile() && path.extname(document) === ".md") {
-                const doc = fs.readFileSync(`${subDirectory}/${document}`).toString();
+            let filePath = `${subdirectory}/${document}`;
+            if (fs.lstatSync(filePath).isFile() && path.extname(document) === ".md") {
+                const doc = fs.readFileSync(filePath).toString();
                 // Count documents with tokens
                 tokens.forEach((tokenObj) => {
                     tokenObj.documentCounter += doc.includes(tokenObj.token) ? 1 : 0;
