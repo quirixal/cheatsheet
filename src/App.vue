@@ -58,7 +58,7 @@ function addFragments(preRenderedMarkdownFile) {
 }
 
 function addAttributes(preRenderedMarkdownFile) {
-    const elementListConfigs = [
+    const elementConfigList = [
         {
             elementTag: "h1",
             class: "site-title",
@@ -88,8 +88,18 @@ function addAttributes(preRenderedMarkdownFile) {
                 {
                     elementTag: "li",
                     class: "list-item",
+                    children: [
+                        {
+                            elementTag: "code",
+                            class: "inline-code",
+                        },
+                    ],
                 },
             ],
+        },
+        {
+            elementTag: "blockquote",
+            class: "blockquote",
         },
         {
             elementTag: "pre",
@@ -101,7 +111,7 @@ function addAttributes(preRenderedMarkdownFile) {
         },
     ];
 
-    elementListConfigs.forEach((config) => {
+    elementConfigList.forEach((config) => {
         const elements = preRenderedMarkdownFile.querySelectorAll(config.elementTag);
         if (config.elementTag === "h1" && elements.length === 1) {
             elements[0].id = "site-title";
@@ -119,6 +129,14 @@ function addAttributes(preRenderedMarkdownFile) {
                         childElements.forEach((childElement) => {
                             childElement.classList.add(child.class);
                         });
+                        if (child.children) {
+                            child.children.forEach((subChild) => {
+                                const childElements = element.querySelectorAll(subChild.elementTag);
+                                childElements.forEach((childElement) => {
+                                    childElement.classList.add(subChild.class);
+                                });
+                            });
+                        }
                     });
                 }
             });

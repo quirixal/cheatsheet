@@ -9,6 +9,8 @@ module.exports = {
     },
     rules: {
         "no-unused-vars": "off",
+        "no-useless-escape": "off",
         "vue/no-mutating-props": "off",
+        "vue/prefer-import-from-vue": "off",
     },
 };
