@@ -10,12 +10,19 @@
 - Updated `pip`, `build` and `twine`
 
 ## Update commands
+All commands works also with active `venv`, just remove `python3 -m `
 ### pip
-`python3 -m pip install --upgrade pip`
+```sh
+python3 -m pip install --upgrade pip
+```
 ### build
-`python3 -m pip install --upgrade build`
+```sh
+python3 -m pip install --upgrade build
+```
 ### twine
-`python3 -m pip install --upgrade twine`
+```sh
+python3 -m pip install --upgrade twine
+```
 
 ## Repository structure
 ```
@@ -27,7 +34,7 @@ ROOT_DIR/
 │   └── PACKAGE_NAME/
 │       ├── __init__.py
 │       └── *.py
-└── tests/
+└── test/
     └── *
 ```
 ### Description
@@ -37,7 +44,7 @@ ROOT_DIR/
 |pyproject.toml|---|
 |README.md|Readme file|
 |src/|Directory for your source code|
-|tests/|Directory for all tests|
+|test/|Directory for all tests|
 ### `src/` description
 |Name|Description|
 |---|---|
