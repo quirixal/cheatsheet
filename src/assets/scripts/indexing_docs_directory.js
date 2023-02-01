@@ -68,8 +68,10 @@ function indexingDocument(documentPath) {
     // Indexing document (Load title, description and keywords)
     const documentContent = fs.readFileSync(documentPath).toString();
     const [title, description, keywords] = getDocumentSpecs(documentContent);
+    // Remove markdown-comments
+    const documentContentWithoutCommentLines = removeCommentLines(documentContent);
     // Generate more keywords from document content
-    const generatedKeywords = generateKeywordsFromDocument(documentContent, 6);
+    const generatedKeywords = generateKeywordsFromDocument(documentContentWithoutCommentLines, 6);
     let mergedKeywords = new Set([...keywords, ...generatedKeywords]);
 
     return { title, description, keywords: [...mergedKeywords], path: documentPath.replace("./", "") };
@@ -117,6 +119,18 @@ function loadDocumentPreservedKeywords(documentLines) {
         const extractedPreservedKeywords = line.match(/(?<=\().+(?=\))/);
         return extractedPreservedKeywords ? extractedPreservedKeywords[0].split(", ") : null;
     }
+}
+
+function removeCommentLines(documentContent) {
+    const documentLines = documentContent.split(/r?\n/);
+    let documentLinesWithoutComments = documentLines.slice(2);
+
+    // Remove empty lines
+    documentLinesWithoutComments = documentLinesWithoutComments.filter((line) => {
+        return line !== "";
+    });
+
+    return documentLinesWithoutComments.join("");
 }
 
 ///////////////////////////////////////////
