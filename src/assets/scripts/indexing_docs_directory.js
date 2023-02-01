@@ -49,6 +49,10 @@ subdirectoryPaths.forEach((subdirectory) => {
 // Write into file
 fs.writeFileSync("./src/assets/json/indexed_docs_directory.json", JSON.stringify(indexedDocs));
 
+///////////////
+// Functions //
+///////////////
+
 function findSubdirectories(docsDir) {
     const result = [];
     docsDir.forEach((x) => {
@@ -130,7 +134,7 @@ function removeCommentLines(documentContent) {
         return line !== "";
     });
 
-    return documentLinesWithoutComments.join("");
+    return documentLinesWithoutComments.join(" ");
 }
 
 ///////////////////////////////////////////
