@@ -10,12 +10,16 @@ Since the cheat sheet was developed for private use only, we apologize for any i
 
 ## Changelog
 Records the history of all changes made to the project.
-### 0.3.7 => Currently under development
+### 0.3.8 => Currently under development
 Upcoming features:
 - Scrolling inside code blocks fixed
 - Writing tests and adding github action
 - A few changes to the repository 
 - Hopefully new docs
+### 0.3.7
+Loading spinner added while load new page
+
+Version `0.3.7` was deployed on **02nd February, 2023**
 ### 0.3.6
 Added docs:
 - Python - pip Scripts
