@@ -6,7 +6,8 @@
   - [Table of contents](#table-of-contents)
   - [Development setup](#development-setup)
   - [Rules for developers](#rules-for-developers)
-  - [Tips for writing a sheet](#tips-for-writing-a-sheet)
+  - [Tips and must have's for writing a sheet](#tips-and-must-haves-for-writing-a-sheet)
+    - [Description and Preserved Keywords](#description-and-preserved-keywords)
     - [Internal links](#internal-links)
   - [How to's](#how-tos)
     - [Generate new index](#generate-new-index)
@@ -44,7 +45,16 @@ Changes **made without** following these rules **will not be merged**.
         - DOC-[LOWERCASED_SHORT_DESCRIPTION_SPLIT_BY_HYPHENS]
 
 **Please try following these rules.**
-## Tips for writing a sheet
+## Tips and must have's for writing a sheet
+### Description and Preserved Keywords
+Both have to look exactly like this:
+```
+[description]: <> (YOUR DESCRIPTION GOES HERE)
+[preservedKeywords]: <> (YOUR PRESERVED COMMA SEPARATED KEYWORDS)
+```
+You write your values between the brackets.  
+**Do not change these order!**  
+**Place this always on top of the `.md` file!**
 ### Internal links
 Use `[Link name](?path=path/to/document.md)` to link another file inside `./src/docs/`.
 ## How to's
@@ -53,7 +63,7 @@ Here you can find some how-to's you may need during develop.
 **The resulting file `indexed_docs_directory.json` should not be pushed.**  
 Open terminal from project directory and use "`node ./src/assets/scripts/indexing_docs_directory.js`" to generate a new index from `src/docs/`.
 ## Deployment
-**Only the repo owner and selected co-developers** are authorized to deploy new versions. A new feature can only be built into a new version via a feature branch that was previously merged into the `main`!  
+**Only the repo owner and selected collaborators** are authorized to deploy new versions. A new feature can only be built into a new version via a feature branch that was previously merged into the `main`!  
 New versions are built by **merging `main` into `production`**. If necessary, a last commit is pushed to `main`, which at most updates the changelog in `./src/docs/index.md`.
 
 Steps to deploy new versions:
