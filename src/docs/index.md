@@ -10,19 +10,27 @@ Since the cheat sheet was developed for private use only, we apologize for any i
 
 ## Changelog
 Records the history of all changes made to the project.
-### 0.3.6 => Currently under development
+### 0.3.7 => Currently under development
 Upcoming features:
 - Scrolling inside code blocks fixed
 - Writing tests and adding github action
 - A few changes to the repository 
 - Hopefully new docs
+### 0.3.6
+Added docs:
+- Python - pip Scripts
+
+Updated docs:
+- Version-control - Useful Scripts
+
+Version `0.3.6` was deployed on **02nd February, 2023**
 ### 0.3.5
 Update indexing script.
 - Remove empty lines (Performance)
 - Remove all numbers by regex
 - Remove markdown-comments (description and preservedKeywords) before indexing
 
-Version `0.3.5` was deployed on **01st January, 2023**
+Version `0.3.5` was deployed on **01st February, 2023**
 ### 0.3.4
 New docs for python packaging.
 

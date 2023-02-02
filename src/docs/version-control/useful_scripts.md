@@ -6,5 +6,5 @@ This script will delete all local git branches.
 
 **Use carful this script won't check anything!**
 ```sh
-# Script goes here
+for branch in $(git branch | grep "[^* ]+" -Eo); do git branch -D "$branch"; done
 ```
