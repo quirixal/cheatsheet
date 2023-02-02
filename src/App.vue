@@ -2,6 +2,9 @@
 navigation-drawer(v-model:activeSearch="states.activeSearch", v-model:activeNavigation="states.activeNavigation", @path-updated="renderMarkdownFile()", @update:appTheme="toggleTheme()")
 search-modal(v-model:active="states.activeSearch", @close-navigation="closeNavigationAndResetSearchValue" @path-updated="renderMarkdownFile()")
 main(v-show="!states.activeNavigation")
+    #loader-wrapper
+        .loader
+        h1 Load new page, please wait.
     #rendered-markdown-file
 </template>
 
@@ -145,8 +148,18 @@ function addAttributes(preRenderedMarkdownFile) {
     return preRenderedMarkdownFile;
 }
 
+function addLoadingSpinner() {
+    document.getElementById("loader-wrapper").style.display = "flex";
+}
+
+function removeLoadingSpinner() {
+    document.getElementById("loader-wrapper").style.display = "none";
+}
+
 // Render function
 async function renderMarkdownFile() {
+    addLoadingSpinner();
+
     const md = markdown;
     const urlQuery = window.location.search.replace("?path=", "");
 
@@ -177,6 +190,7 @@ async function renderMarkdownFile() {
     clipboard.on("error", (e) => {
         console.log("copy error", e);
     });
+    removeLoadingSpinner();
 }
 
 function addCopyElementToPreElements(content) {
@@ -216,5 +230,47 @@ onMounted(() => {
     max-width: $cs-rmf-max-width;
     padding: $cs-rmf-padding;
     margin: auto;
+}
+
+#loader-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #2b2b2b80;
+    height: calc(100vh - 56px);
+
+    .loader {
+        border: 16px solid $cs-white;
+        border-radius: 50%;
+        border-top: 16px solid $cs-secondary-color;
+        width: 120px;
+        height: 120px;
+        -webkit-animation: spin 2s linear infinite; /* Safari */
+        animation: spin 2s linear infinite;
+    }
+
+    h1 {
+        color: $cs-white;
+    }
+
+    /* Safari */
+    @-webkit-keyframes spin {
+        0% {
+            -webkit-transform: rotate(0deg);
+        }
+        100% {
+            -webkit-transform: rotate(360deg);
+        }
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
 }
 </style>
