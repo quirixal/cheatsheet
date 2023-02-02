@@ -2,6 +2,9 @@
 navigation-drawer(v-model:activeSearch="states.activeSearch", v-model:activeNavigation="states.activeNavigation", @path-updated="renderMarkdownFile()", @update:appTheme="toggleTheme()")
 search-modal(v-model:active="states.activeSearch", @close-navigation="closeNavigationAndResetSearchValue" @path-updated="renderMarkdownFile()")
 main(v-show="!states.activeNavigation")
+    #loader-wrapper
+        .loader
+        h1 Load new page, please wait.
     #rendered-markdown-file
 </template>
 
@@ -145,8 +148,18 @@ function addAttributes(preRenderedMarkdownFile) {
     return preRenderedMarkdownFile;
 }
 
+function addLoadingSpinner() {
+    document.getElementById("loader-wrapper").style.display = "flex";
+}
+
+function removeLoadingSpinner() {
+    document.getElementById("loader-wrapper").style.display = "none";
+}
+
 // Render function
 async function renderMarkdownFile() {
+    addLoadingSpinner();
+
     const md = markdown;
     const urlQuery = window.location.search.replace("?path=", "");
 
@@ -177,6 +190,7 @@ async function renderMarkdownFile() {
     clipboard.on("error", (e) => {
         console.log("copy error", e);
     });
+    removeLoadingSpinner();
 }
 
 function addCopyElementToPreElements(content) {
