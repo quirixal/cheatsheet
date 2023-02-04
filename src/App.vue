@@ -24,7 +24,7 @@ const config = inject("config");
 const states = reactive({
     activeNavigation: false,
     activeSearch: false,
-    lightMode: true,
+    lightMode: null,
 });
 
 function addFragments(preRenderedMarkdownFile) {
@@ -204,10 +204,13 @@ function closeNavigationAndResetSearchValue() {
     states.searchValue = null;
 }
 
-function toggleTheme(init = false) {
-    if (!init) {
-        states.lightMode = !states.lightMode;
-    }
+function toggleTheme() {
+    states.lightMode = !states.lightMode;
+    localStorage.setItem("cheat_sheet_light_mode", states.lightMode);
+    setThemeClass();
+}
+
+function setThemeClass() {
     if (states.lightMode) {
         document.getElementById("app").classList.remove("dark");
         document.getElementById("app").classList.add("light");
@@ -217,10 +220,18 @@ function toggleTheme(init = false) {
     }
 }
 
+function loadAppThemeFromLocalStorage() {
+    let storedAppThemeStr = localStorage.getItem("cheat_sheet_light_mode");
+    let storedAppTheme = storedAppThemeStr === null ? true : storedAppThemeStr === "true" ? true : false;
+    localStorage.setItem("cheat_sheet_light_mode", storedAppTheme);
+    states.lightMode = storedAppTheme;
+}
+
 onMounted(() => {
     document.addEventListener("DOMContentLoaded", () => {
         renderMarkdownFile();
-        toggleTheme(true);
+        loadAppThemeFromLocalStorage();
+        setThemeClass();
     });
 });
 </script>
