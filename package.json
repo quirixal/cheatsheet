@@ -3,6 +3,7 @@
     "version": "0.0.0",
     "scripts": {
         "dev": "vite --host",
+        "set_dev_config": "[ -f \"./src/config.json\" ] && echo \"Config already exists\" || cp ./src/config-example.json ./src/config.json && sed -i \"\" \"s/\\[YOUR CURRENT BRANCH\\]/$(git branch --show-current)/g\" ./src/config.json",
         "build": "vite build",
         "preview": "vite preview",
         "test:unit": "vitest --environment jsdom --root src/",
