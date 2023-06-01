@@ -30,7 +30,7 @@ Other changes made:
 
 -   Update deploy workflow
 
-Version `0.3.9` was deployed on **30th May, 2023**
+Version `0.3.9` was deployed on **1st June, 2023**
 
 ### 0.3.8
 
