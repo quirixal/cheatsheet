@@ -29,16 +29,11 @@ jobs:
                   npm i
                   cp src/config-production.json src/config.json
                   npm run build
-                  git add dist/ && git commit -m "Build new version => ${{ github.event.head_commit.message }}"
-                  git push origin production:gh-pages -f
-                  git checkout -t origin/gh-pages
-                  git fetch --all
-                  git pull --all
                   shopt -s extglob
                   rm -rf !("dist")
+                  rm -rf .vscode/ .github/ .gitignore .prettierrc.json .eslintrc.cjs
                   mv dist/* .
                   rm -rf dist
-                  rm -rf .vscode/ .github/ .gitignore .prettierrc.json .eslintrc.cjs
                   git add -A && git commit -m "Deploy new version => ${{ github.event.head_commit.message }}"
-                  git push -f
+                  git push origin production:gh-pages -f
               shell: bash
