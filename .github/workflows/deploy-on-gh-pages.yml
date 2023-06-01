@@ -2,7 +2,7 @@ name: "push-to-gh-pages"
 
 on:
     push:
-        branches: ["production"]
+        branches: ["new_workflow_definition"]
 
 jobs:
     push-to-gh-pages:
@@ -29,16 +29,6 @@ jobs:
                   npm i
                   cp src/config-production.json src/config.json
                   npm run build
-                  git add dist/ && git commit -m "Build new version => ${{ github.event.head_commit.message }}"
+                  git add dist/assets/* dist/index.html dist/favicon.ico && git commit -m "Deploy new version => ${{ github.event.head_commit.message }}"
                   git push origin production:gh-pages -f
-                  git checkout -t origin/gh-pages
-                  git fetch --all
-                  git pull --all
-                  shopt -s extglob
-                  rm -rf !("dist")
-                  mv dist/* .
-                  rm -rf dist
-                  rm -rf .vscode/ .github/ .gitignore .prettierrc.json .eslintrc.cjs
-                  git add -A && git commit -m "Deploy new version => ${{ github.event.head_commit.message }}"
-                  git push -f
               shell: bash
