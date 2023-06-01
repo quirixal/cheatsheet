@@ -29,6 +29,6 @@ jobs:
                   npm i
                   cp src/config-production.json src/config.json
                   npm run build
-                  git add dist/assets/* dist/index.html dist/favicon.ico && git commit -m "Deploy new version => ${{ github.event.head_commit.message }}"
+                  git add dist/* && git commit -m "Deploy new version => ${{ github.event.head_commit.message }}"
                   git push origin production:gh-pages -f
               shell: bash
