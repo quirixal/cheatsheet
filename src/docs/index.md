@@ -12,14 +12,25 @@ Since the cheat sheet was developed for private use only, we apologize for any i
 
 Records the history of all changes made to the project.
 
-### 0.3.9 => Currently under development
+### 0.3.10 => Currently under development
 
 Upcoming features:
 
 -   Scrolling inside code blocks fixed
--   Writing tests and adding github action
--   A few changes to the repository
+-   Writing tests and adding github test action
 -   Hopefully new docs
+
+### 0.3.9
+
+Added docs:
+
+-   [SSH](?path=src/docs/tools/ssh.md)
+
+Other changes made:
+
+-   Update deploy workflow
+
+Version `0.3.9` was deployed on **30th May, 2023**
 
 ### 0.3.8
 
