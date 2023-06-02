@@ -12,13 +12,19 @@ Since the cheat sheet was developed for private use only, we apologize for any i
 
 Records the history of all changes made to the project.
 
-### 0.3.10 => Currently under development
+### 0.3.11 => Currently under development
 
 Upcoming features:
 
 -   Scrolling inside code blocks fixed
 -   Writing tests and adding github test action
 -   Hopefully new docs
+
+### 0.3.10
+
+Add Pinia store
+
+Version `0.3.10` was deployed on **3rd June, 2023**
 
 ### 0.3.9
 
