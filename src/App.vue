@@ -1,6 +1,6 @@
 <template lang="pug">
-navigation-drawer(v-model:activeSearch="states.activeSearch" @path-updated="renderMarkdownFile()", @update:appTheme="toggleTheme()")
-search-modal(v-model:active="states.activeSearch", @path-updated="renderMarkdownFile()")
+navigation-drawer(@path-updated="renderMarkdownFile()", @update:appTheme="toggleTheme()")
+search-modal(@path-updated="renderMarkdownFile()")
 main(v-show="!store.getNavigationState")
     #loader-wrapper
         .loader
@@ -10,7 +10,7 @@ main(v-show="!store.getNavigationState")
 
 <script setup>
 import { markdown } from "./markdownit";
-import { onMounted, inject, reactive } from "vue";
+import { onMounted, inject } from "vue";
 import { http } from "./axios.js";
 import ClipboardJs from "clipboard";
 
@@ -24,9 +24,6 @@ import { trigger } from "@vue/reactivity";
 // Defining config & states
 const config = inject("config");
 const store = useMainStore();
-const states = reactive({
-    activeSearch: false,
-});
 
 function addFragments(preRenderedMarkdownFile) {
     const headlineLists = [

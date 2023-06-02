@@ -1,8 +1,8 @@
 <template lang="pug">
-#search-modal.flex(v-if="props.active", @click.self="closeSearch")
+#search-modal.flex(v-if="store.getSearchState", @click.self="store.closeSearch()")
     .card.flex.column
         .card-header
-            button.close-btn.pointer(@click="closeSearch")
+            button.close-btn.pointer(@click="store.closeSearch()")
                 span.material-symbols-outlined close
             h1.card-title Search through cheat sheet
             input.searchbar(v-model="data.searchValue", type="text", name="search", placeholder="Type to search...", @input="search")
@@ -10,7 +10,7 @@
         .card-body.flex-filler
             p.hint(v-if="data.searchResult?.length === 0 && data.searchValue?.length >= 3") Nothing Found
             p.hint(v-if="data.searchResult?.length === 0 && data.recentSearch") Recent search
-            ul(v-if="props.searchResult || data.recentSearch")
+            ul(v-if="data.recentSearch")
                 search-result-item(v-if="data.searchResult?.length >=1", v-for="result in data.searchResult", :result="result", @update-path="setPathInURL($event)")
                 li.recent-search-result.pointer(v-else, v-for="result in data.recentSearch", @click="useRecent(result)") {{result}}
         
@@ -24,15 +24,14 @@
 </template>
 
 <script setup>
-import { onMounted, onUpdated, reactive, watch } from "vue";
+import { onMounted, onUpdated, reactive } from "vue";
 import indexedDocs from "@/assets/json/indexed_docs_directory.json";
 import Fuse from "fuse.js";
 
 import { useMainStore } from "../stores";
 import searchResultItem from "./searchResultItem.vue";
 
-const props = defineProps(["active"]);
-const emit = defineEmits(["update:active", "pathUpdated"]);
+const emit = defineEmits(["pathUpdated"]);
 const store = useMainStore();
 const data = reactive({
     searchValue: null,
@@ -155,11 +154,11 @@ function closeSearch() {
     }
     data.searchValue = null;
     data.searchResult = [];
-    emit("update:active", false);
+    store.closeSearch();
 }
 
 onUpdated(() => {
-    if (props && props.active) {
+    if (store.getSearchState) {
         const searchbar = document.querySelector("#search-modal .card .searchbar");
         searchbar.focus();
     }
@@ -168,13 +167,6 @@ onUpdated(() => {
 function loadRecentSearch() {
     return JSON.parse(localStorage.getItem("recentSearch"));
 }
-watch(props, (props) => {
-    if (props.active) {
-        const loadedRecentSearch = loadRecentSearch();
-        if (data.recentSearch != loadedRecentSearch) data.recentSearch = loadedRecentSearch;
-        else if (!loadedRecentSearch) data.recentSearch = [];
-    }
-});
 
 onMounted(() => {
     data.searchValueList = indexedDocs.map((section) => section.links).flat(1);

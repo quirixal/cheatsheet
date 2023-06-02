@@ -12,7 +12,7 @@
         circleIconButton.theme-switch(:icon="'brightness_4'", :tooltip="'Switch theme'", icon-size-class="large",  @click="emit('update:appTheme')")
 
         //- Open search button
-        circleIconButton.search-button(:icon="'search'", :tooltip="'Open Search'", icon-size-class="large", @click="emit('update:activeSearch', true)")
+        circleIconButton.search-button(:icon="'search'", :tooltip="'Open Search'", icon-size-class="large", @click="store.openSearch()")
     
     .expansion-bar
         //- For toolbox uncomment following lines
@@ -34,8 +34,7 @@ import circleIconButton from "./core/buttons/circleIconButton.vue";
 import { useMainStore } from "../stores";
 
 // Defining props & emits
-const props = defineProps(["activeSearch"]);
-const emit = defineEmits(["pathUpdated", "update:appTheme", "update:activeSearch"]);
+const emit = defineEmits(["pathUpdated", "update:appTheme"]);
 const store = useMainStore();
 
 // Functions
