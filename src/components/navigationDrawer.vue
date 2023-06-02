@@ -1,10 +1,17 @@
 <template lang="pug">
-#navigation-drawer(:class="{'active':props.activeNavigation}")
+#navigation-drawer(:class="{'active':store.getNavigationState}")
     .top-bar.flex
-        circleIconButton.burger-menu(:icon="'menu'", :tooltip="'Open menu'", icon-size-class="large", @click="emit('update:activeNavigation', !props.activeNavigation);")
+        //- Menu button
+        circleIconButton.burger-menu(:icon="'menu'", :tooltip="'Open menu'", icon-size-class="large", @click="store.toggleNavigation()")
+
+        //- Navigation itle
         h2.nav-title.pointer.text-ellipsis(@click="resetURLState") Cheat sheet
         .flex-filler
-        circleIconButton.theme-switch(:icon="'brightness_4'", :tooltip="'Switch theme'", icon-size-class="large",  @click="toggleTheme")
+
+        //- Theme switch button
+        circleIconButton.theme-switch(:icon="'brightness_4'", :tooltip="'Switch theme'", icon-size-class="large",  @click="emit('update:appTheme')")
+
+        //- Open search button
         circleIconButton.search-button(:icon="'search'", :tooltip="'Open Search'", icon-size-class="large", @click="emit('update:activeSearch', true)")
     
     .expansion-bar
@@ -24,26 +31,21 @@
 // Components
 import navigationList from "./navigationList.vue";
 import circleIconButton from "./core/buttons/circleIconButton.vue";
+import { useMainStore } from "../stores";
 
 // Defining props & emits
-const props = defineProps(["activeNavigation", "activeSearch"]);
-const emit = defineEmits(["pathUpdated", "update:activeNavigation", "update:appTheme", "update:activeSearch"]);
+const props = defineProps(["activeSearch"]);
+const emit = defineEmits(["pathUpdated", "update:appTheme", "update:activeSearch"]);
+const store = useMainStore();
 
 // Functions
-function closeNavigation() {
-    emit("update:activeNavigation", false);
-}
 function resetURLState() {
     window.history.replaceState(null, document.title, "/cheetsheet/");
     emitPath();
 }
 function emitPath() {
-    closeNavigation();
+    store.closeNavigation();
     emit("pathUpdated");
-}
-function toggleTheme() {
-    closeNavigation();
-    emit("update:appTheme");
 }
 </script>
 

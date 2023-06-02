@@ -1,7 +1,7 @@
 <template lang="pug">
-navigation-drawer(v-model:activeSearch="states.activeSearch", v-model:activeNavigation="states.activeNavigation", @path-updated="renderMarkdownFile()", @update:appTheme="toggleTheme()")
-search-modal(v-model:active="states.activeSearch", @close-navigation="closeNavigationAndResetSearchValue" @path-updated="renderMarkdownFile()")
-main(v-show="!states.activeNavigation")
+navigation-drawer(v-model:activeSearch="states.activeSearch" @path-updated="renderMarkdownFile()", @update:appTheme="toggleTheme()")
+search-modal(v-model:active="states.activeSearch", @path-updated="renderMarkdownFile()")
+main(v-show="!store.getNavigationState")
     #loader-wrapper
         .loader
         h1 Load new page, please wait.
@@ -25,7 +25,6 @@ import { trigger } from "@vue/reactivity";
 const config = inject("config");
 const store = useMainStore();
 const states = reactive({
-    activeNavigation: false,
     activeSearch: false,
 });
 
@@ -201,12 +200,9 @@ function addCopyElementToPreElements(content) {
     });
 }
 
-function closeNavigationAndResetSearchValue() {
-    states.activeNavigation = !states.activeNavigation;
-    states.searchValue = null;
-}
-
 function toggleTheme() {
+    if (store.getNavigationState) store.closeNavigation();
+
     store.toggleAppTheme();
     if (store.isLight) {
         document.getElementById("app").classList.remove("dark");

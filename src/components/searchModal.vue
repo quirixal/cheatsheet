@@ -28,10 +28,12 @@ import { onMounted, onUpdated, reactive, watch } from "vue";
 import indexedDocs from "@/assets/json/indexed_docs_directory.json";
 import Fuse from "fuse.js";
 
+import { useMainStore } from "../stores";
 import searchResultItem from "./searchResultItem.vue";
 
 const props = defineProps(["active"]);
-const emit = defineEmits(["update:active", "pathUpdated", "closeNavigation"]);
+const emit = defineEmits(["update:active", "pathUpdated"]);
+const store = useMainStore();
 const data = reactive({
     searchValue: null,
     searchValueList: null,
@@ -131,7 +133,7 @@ function setPathInURL(path) {
     window.history.replaceState(null, document.title, `?path=${path}`);
     emit("pathUpdated");
     closeSearch();
-    emit("closeNavigation");
+    store.closeNavigationResetSearch();
 }
 
 function closeSearch() {

@@ -33,6 +33,10 @@ export const useMainStore = defineStore("main", {
         closeNavigation() {
             this.navigation.state = false;
         },
+        closeNavigationResetSearch() {
+            this.navigation.state = false;
+            this.search.value = null;
+        },
         toggleNavigation() {
             this.navigation.state = !this.navigation.state;
         },
