@@ -65,17 +65,28 @@
         position: relative;
         overflow-x: auto;
 
-        .clipboard {
-            display: none;
-            position: absolute;
-            top: 4px;
-            right: 4px;
-            cursor: pointer;
+        .clipboard-wrapper {
+            position: fixed;
+            width: calc(100% - $cs-padding * 4);
+            display: flex;
+
+            .flex-1 {
+                flex: 1;
+            }
+
+            .clipboard {
+                opacity: 0;
+                cursor: pointer;
+                transition: all 0.3s ease-in-out;
+                scroll-behavior: none;
+            }
         }
 
         &:hover {
-            .clipboard {
-                display: block;
+            .clipboard-wrapper {
+                .clipboard {
+                    opacity: 1;
+                }
             }
         }
 

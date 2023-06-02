@@ -170,7 +170,7 @@ async function renderMarkdownFile() {
 
 function addCopyElementToPreElements(content) {
     return content.replaceAll(/\<pre\>/g, (value) => {
-        return `${value}<span class="clipboard  material-symbols-outlined">content_copy</span>`;
+        return `${value}<div class="clipboard-wrapper"><div class="flex-1"></div><span class="clipboard  material-symbols-outlined">content_copy</span></div>`;
     });
 }
 
