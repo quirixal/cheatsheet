@@ -9,10 +9,10 @@
         
         .card-body.flex-filler
             p.hint(v-if="data.searchResult?.length === 0 && data.searchValue?.length >= 3") Nothing Found
-            p.hint(v-if="data.searchResult?.length === 0 && data.recentSearch") Recent search
-            ul(v-if="data.recentSearch")
+            p.hint(v-if="data.searchResult?.length === 0 && store.getSearchRecentSearch") Recent search
+            ul
                 search-result-item(v-if="data.searchResult?.length >=1", v-for="result in data.searchResult", :result="result", @update-path="setPathInURL($event)")
-                li.recent-search-result.pointer(v-else, v-for="result in data.recentSearch", @click="useRecent(result)") {{result}}
+                li.recent-search-result.pointer(v-else, v-for="result in store.getSearchRecentSearch", @click="useRecent(result)") {{result}}
         
         .card-footer
             .fuse-banner.flex
@@ -24,8 +24,7 @@
 </template>
 
 <script setup>
-import { onMounted, onUpdated, reactive } from "vue";
-import indexedDocs from "@/assets/json/indexed_docs_directory.json";
+import { onUpdated, reactive } from "vue";
 import Fuse from "fuse.js";
 
 import { useMainStore } from "../stores";
@@ -35,8 +34,6 @@ const emit = defineEmits(["pathUpdated"]);
 const store = useMainStore();
 const data = reactive({
     searchValue: null,
-    searchValueList: null,
-    recentSearch: null,
     searchResult: [],
 });
 const minSearchLength = 3;
@@ -116,7 +113,7 @@ function search() {
         return resultItem;
     };
 
-    const fuse = new Fuse(data.searchValueList, options);
+    const fuse = new Fuse(store.getSearchValues, options);
     let result = fuse.search(fuzzySearchValue);
 
     result = result.map((resultItem) => highlighter(resultItem)).map((el) => el.item);
@@ -132,25 +129,25 @@ function setPathInURL(path) {
     window.history.replaceState(null, document.title, `?path=${path}`);
     emit("pathUpdated");
     closeSearch();
-    store.closeNavigationResetSearch();
+    store.closeNavigation();
 }
 
 function closeSearch() {
     if (data.searchValue?.length >= minSearchLength) {
-        let recentSearch = loadRecentSearch();
+        let rs = store.getSearchRecentSearch;
 
-        if (!recentSearch) {
-            recentSearch = [];
-            recentSearch.push(data.searchValue);
+        if (!rs) {
+            rs = [];
+            rs.push(data.searchValue);
         } else {
-            if (!recentSearch.includes(data.searchValue)) {
-                if (recentSearch.length === maxRecentSearchValues) {
-                    recentSearch.pop();
+            if (!rs.includes(data.searchValue)) {
+                if (rs.length === maxRecentSearchValues) {
+                    rs.pop();
                 }
-                recentSearch.unshift(data.searchValue);
+                rs.unshift(data.searchValue);
             }
         }
-        localStorage.setItem("recentSearch", JSON.stringify(recentSearch));
+        localStorage.setItem("recentSearch", JSON.stringify(rs));
     }
     data.searchValue = null;
     data.searchResult = [];
@@ -162,14 +159,6 @@ onUpdated(() => {
         const searchbar = document.querySelector("#search-modal .card .searchbar");
         searchbar.focus();
     }
-});
-
-function loadRecentSearch() {
-    return JSON.parse(localStorage.getItem("recentSearch"));
-}
-
-onMounted(() => {
-    data.searchValueList = indexedDocs.map((section) => section.links).flat(1);
 });
 </script>
 

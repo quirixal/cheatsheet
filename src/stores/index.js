@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import indexedDocs from "../assets/json/indexed_docs_directory.json";
 
 export const useMainStore = defineStore("main", {
     state: () => ({
@@ -10,14 +11,16 @@ export const useMainStore = defineStore("main", {
         },
         search: {
             state: false,
-            value: null,
+            values: indexedDocs.map((section) => section.links).flat(1),
+            recentSearch: JSON.parse(localStorage.getItem("recentSearch")),
         },
     }),
     getters: {
         isLight: (state) => state.app.lightTheme,
         getNavigationState: (state) => state.navigation.state,
         getSearchState: (state) => state.search.state,
-        getSearchValue: (state) => state.search.value,
+        getSearchValues: (state) => state.search.values,
+        getSearchRecentSearch: (state) => state.search.recentSearch,
     },
     actions: {
         toggleAppTheme() {
@@ -32,10 +35,6 @@ export const useMainStore = defineStore("main", {
         },
         closeNavigation() {
             this.navigation.state = false;
-        },
-        closeNavigationResetSearch() {
-            this.navigation.state = false;
-            this.search.value = null;
         },
         toggleNavigation() {
             this.navigation.state = !this.navigation.state;
