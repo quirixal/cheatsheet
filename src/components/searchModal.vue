@@ -1,32 +1,6 @@
-<template lang="pug">
-#search-modal.flex(v-if="store.getSearchState", @click.self="store.closeSearch()")
-    .card.flex.column
-        .card-header
-            button.close-btn.pointer(@click="store.closeSearch()")
-                span.material-symbols-outlined close
-            h1.card-title Search through cheat sheet
-            input.searchbar(v-model="data.searchValue", type="text", name="search", placeholder="Type to search...", @input="search")
-        
-        .card-body.flex-filler
-            p.hint(v-if="data.searchResult?.length === 0 && data.searchValue?.length >= 3") Nothing Found
-            p.hint(v-if="data.searchResult?.length === 0 && store.getSearchRecentSearch") Recent search
-            ul
-                search-result-item(v-if="data.searchResult?.length >=1", v-for="result in data.searchResult", :result="result", @update-path="setPathInURL($event)")
-                li.recent-search-result.pointer(v-else, v-for="result in store.getSearchRecentSearch", @click="useRecent(result)") {{result}}
-        
-        .card-footer
-            .fuse-banner.flex
-                a.help-link(href="https://fusejs.io/examples.html#extended-search", target="__blank")
-                    span.material-symbols-outlined help
-                .flex-filler
-                span Made with #[a(href="https://fusejs.io/") Fuse.js]
-
-</template>
-
 <script setup>
 import { onUpdated, reactive } from "vue";
 import Fuse from "fuse.js";
-
 import { useMainStore } from "../stores";
 import searchResultItem from "./searchResultItem.vue";
 
@@ -161,6 +135,31 @@ onUpdated(() => {
     }
 });
 </script>
+
+<template lang="pug">
+#search-modal.flex(v-if="store.getSearchState", @click.self="store.closeSearch()")
+    .card.flex.column
+        .card-header
+            button.close-btn.pointer(@click="store.closeSearch()")
+                span.material-symbols-outlined close
+            h1.card-title Search through cheat sheet
+            input.searchbar(v-model="data.searchValue", type="text", name="search", placeholder="Type to search...", @input="search")
+        
+        .card-body.flex-filler
+            p.hint(v-if="data.searchResult?.length === 0 && data.searchValue?.length >= 3") Nothing Found
+            p.hint(v-if="data.searchResult?.length === 0 && store.getSearchRecentSearch") Recent search
+            ul
+                search-result-item(v-if="data.searchResult?.length >=1", v-for="result in data.searchResult", :result="result", @update-path="setPathInURL($event)")
+                li.recent-search-result.pointer(v-else, v-for="result in store.getSearchRecentSearch", @click="useRecent(result)") {{result}}
+        
+        .card-footer
+            .fuse-banner.flex
+                a.help-link(href="https://fusejs.io/examples.html#extended-search", target="__blank")
+                    span.material-symbols-outlined help
+                .flex-filler
+                span Made with #[a(href="https://fusejs.io/") Fuse.js]
+
+</template>
 
 <style lang="scss" scoped>
 #search-modal {

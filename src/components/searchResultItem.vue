@@ -1,3 +1,8 @@
+<script setup>
+defineProps(["result"]);
+defineEmits(["updatePath"]);
+</script>
+
 <template lang="pug">
 li.result-item.pointer.flex.column(@click="$emit('updatePath', result.path)")
     .result-item-header
@@ -7,11 +12,6 @@ li.result-item.pointer.flex.column(@click="$emit('updatePath', result.path)")
         p.result-item-keywords
             .chip(v-for="key in result.highlighted.keywords ? result.highlighted.keywords : result.keywords", v-html="key")
 </template>
-
-<script setup>
-defineProps(["result"]);
-defineEmits(["updatePath"]);
-</script>
 
 <style lang="scss">
 .result-item {
