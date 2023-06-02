@@ -1,18 +1,18 @@
 <template lang="pug">
-#search-modal.flex(v-if="props.active", @click.self="closeSearch")
+#search-modal.flex(v-if="store.getSearchState", @click.self="store.closeSearch()")
     .card.flex.column
         .card-header
-            button.close-btn.pointer(@click="closeSearch")
+            button.close-btn.pointer(@click="store.closeSearch()")
                 span.material-symbols-outlined close
             h1.card-title Search through cheat sheet
             input.searchbar(v-model="data.searchValue", type="text", name="search", placeholder="Type to search...", @input="search")
         
         .card-body.flex-filler
             p.hint(v-if="data.searchResult?.length === 0 && data.searchValue?.length >= 3") Nothing Found
-            p.hint(v-if="data.searchResult?.length === 0 && data.recentSearch") Recent search
-            ul(v-if="props.searchResult || data.recentSearch")
+            p.hint(v-if="data.searchResult?.length === 0 && store.getSearchRecentSearch") Recent search
+            ul
                 search-result-item(v-if="data.searchResult?.length >=1", v-for="result in data.searchResult", :result="result", @update-path="setPathInURL($event)")
-                li.recent-search-result.pointer(v-else, v-for="result in data.recentSearch", @click="useRecent(result)") {{result}}
+                li.recent-search-result.pointer(v-else, v-for="result in store.getSearchRecentSearch", @click="useRecent(result)") {{result}}
         
         .card-footer
             .fuse-banner.flex
@@ -24,18 +24,16 @@
 </template>
 
 <script setup>
-import { onMounted, onUpdated, reactive, watch } from "vue";
-import indexedDocs from "@/assets/json/indexed_docs_directory.json";
+import { onUpdated, reactive } from "vue";
 import Fuse from "fuse.js";
 
+import { useMainStore } from "../stores";
 import searchResultItem from "./searchResultItem.vue";
 
-const props = defineProps(["active"]);
-const emit = defineEmits(["update:active", "pathUpdated", "closeNavigation"]);
+const emit = defineEmits(["pathUpdated"]);
+const store = useMainStore();
 const data = reactive({
     searchValue: null,
-    searchValueList: null,
-    recentSearch: null,
     searchResult: [],
 });
 const minSearchLength = 3;
@@ -115,7 +113,7 @@ function search() {
         return resultItem;
     };
 
-    const fuse = new Fuse(data.searchValueList, options);
+    const fuse = new Fuse(store.getSearchValues, options);
     let result = fuse.search(fuzzySearchValue);
 
     result = result.map((resultItem) => highlighter(resultItem)).map((el) => el.item);
@@ -131,51 +129,36 @@ function setPathInURL(path) {
     window.history.replaceState(null, document.title, `?path=${path}`);
     emit("pathUpdated");
     closeSearch();
-    emit("closeNavigation");
+    store.closeNavigation();
 }
 
 function closeSearch() {
     if (data.searchValue?.length >= minSearchLength) {
-        let recentSearch = loadRecentSearch();
+        let rs = store.getSearchRecentSearch;
 
-        if (!recentSearch) {
-            recentSearch = [];
-            recentSearch.push(data.searchValue);
+        if (!rs) {
+            rs = [];
+            rs.push(data.searchValue);
         } else {
-            if (!recentSearch.includes(data.searchValue)) {
-                if (recentSearch.length === maxRecentSearchValues) {
-                    recentSearch.pop();
+            if (!rs.includes(data.searchValue)) {
+                if (rs.length === maxRecentSearchValues) {
+                    rs.pop();
                 }
-                recentSearch.unshift(data.searchValue);
+                rs.unshift(data.searchValue);
             }
         }
-        localStorage.setItem("recentSearch", JSON.stringify(recentSearch));
+        localStorage.setItem("recentSearch", JSON.stringify(rs));
     }
     data.searchValue = null;
     data.searchResult = [];
-    emit("update:active", false);
+    store.closeSearch();
 }
 
 onUpdated(() => {
-    if (props && props.active) {
+    if (store.getSearchState) {
         const searchbar = document.querySelector("#search-modal .card .searchbar");
         searchbar.focus();
     }
-});
-
-function loadRecentSearch() {
-    return JSON.parse(localStorage.getItem("recentSearch"));
-}
-watch(props, (props) => {
-    if (props.active) {
-        const loadedRecentSearch = loadRecentSearch();
-        if (data.recentSearch != loadedRecentSearch) data.recentSearch = loadedRecentSearch;
-        else if (!loadedRecentSearch) data.recentSearch = [];
-    }
-});
-
-onMounted(() => {
-    data.searchValueList = indexedDocs.map((section) => section.links).flat(1);
 });
 </script>
 

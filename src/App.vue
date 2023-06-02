@@ -1,7 +1,7 @@
 <template lang="pug">
-navigation-drawer(v-model:activeSearch="states.activeSearch", v-model:activeNavigation="states.activeNavigation", @path-updated="renderMarkdownFile()", @update:appTheme="toggleTheme()")
-search-modal(v-model:active="states.activeSearch", @close-navigation="closeNavigationAndResetSearchValue" @path-updated="renderMarkdownFile()")
-main(v-show="!states.activeNavigation")
+navigation-drawer(@path-updated="renderMarkdownFile()", @update:appTheme="toggleTheme()")
+search-modal(@path-updated="renderMarkdownFile()")
+main(v-show="!store.getNavigationState")
     #loader-wrapper
         .loader
         h1 Load new page, please wait.
@@ -10,9 +10,11 @@ main(v-show="!states.activeNavigation")
 
 <script setup>
 import { markdown } from "./markdownit";
-import { onMounted, inject, reactive } from "vue";
+import { onMounted, inject } from "vue";
 import { http } from "./axios.js";
 import ClipboardJs from "clipboard";
+
+import { useMainStore } from "./stores";
 
 // Components
 import navigationDrawer from "./components/navigationDrawer.vue";
@@ -21,11 +23,7 @@ import { trigger } from "@vue/reactivity";
 
 // Defining config & states
 const config = inject("config");
-const states = reactive({
-    activeNavigation: false,
-    activeSearch: false,
-    lightMode: null,
-});
+const store = useMainStore();
 
 function addFragments(preRenderedMarkdownFile) {
     const headlineLists = [
@@ -199,19 +197,11 @@ function addCopyElementToPreElements(content) {
     });
 }
 
-function closeNavigationAndResetSearchValue() {
-    states.activeNavigation = !states.activeNavigation;
-    states.searchValue = null;
-}
-
 function toggleTheme() {
-    states.lightMode = !states.lightMode;
-    localStorage.setItem("cheat_sheet_light_mode", states.lightMode);
-    setThemeClass();
-}
+    if (store.getNavigationState) store.closeNavigation();
 
-function setThemeClass() {
-    if (states.lightMode) {
+    store.toggleAppTheme();
+    if (store.isLight) {
         document.getElementById("app").classList.remove("dark");
         document.getElementById("app").classList.add("light");
     } else {
@@ -220,18 +210,18 @@ function setThemeClass() {
     }
 }
 
-function loadAppThemeFromLocalStorage() {
-    let storedAppThemeStr = localStorage.getItem("cheat_sheet_light_mode");
-    let storedAppTheme = storedAppThemeStr === null ? true : storedAppThemeStr === "true" ? true : false;
-    localStorage.setItem("cheat_sheet_light_mode", storedAppTheme);
-    states.lightMode = storedAppTheme;
-}
-
 onMounted(() => {
     document.addEventListener("DOMContentLoaded", () => {
         renderMarkdownFile();
-        loadAppThemeFromLocalStorage();
-        setThemeClass();
+        store.loadAppThemeFromLocalStorage();
+
+        if (store.isLight) {
+            document.getElementById("app").classList.remove("dark");
+            document.getElementById("app").classList.add("light");
+        } else {
+            document.getElementById("app").classList.add("dark");
+            document.getElementById("app").classList.remove("light");
+        }
     });
 });
 </script>
