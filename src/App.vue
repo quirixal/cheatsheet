@@ -14,6 +14,8 @@ import { onMounted, inject, reactive } from "vue";
 import { http } from "./axios.js";
 import ClipboardJs from "clipboard";
 
+import { useMainStore } from "./stores";
+
 // Components
 import navigationDrawer from "./components/navigationDrawer.vue";
 import searchModal from "./components/searchModal.vue";
@@ -21,10 +23,10 @@ import { trigger } from "@vue/reactivity";
 
 // Defining config & states
 const config = inject("config");
+const store = useMainStore();
 const states = reactive({
     activeNavigation: false,
     activeSearch: false,
-    lightMode: null,
 });
 
 function addFragments(preRenderedMarkdownFile) {
@@ -205,13 +207,8 @@ function closeNavigationAndResetSearchValue() {
 }
 
 function toggleTheme() {
-    states.lightMode = !states.lightMode;
-    localStorage.setItem("cheat_sheet_light_mode", states.lightMode);
-    setThemeClass();
-}
-
-function setThemeClass() {
-    if (states.lightMode) {
+    store.toggleAppTheme();
+    if (store.isLight) {
         document.getElementById("app").classList.remove("dark");
         document.getElementById("app").classList.add("light");
     } else {
@@ -220,18 +217,18 @@ function setThemeClass() {
     }
 }
 
-function loadAppThemeFromLocalStorage() {
-    let storedAppThemeStr = localStorage.getItem("cheat_sheet_light_mode");
-    let storedAppTheme = storedAppThemeStr === null ? true : storedAppThemeStr === "true" ? true : false;
-    localStorage.setItem("cheat_sheet_light_mode", storedAppTheme);
-    states.lightMode = storedAppTheme;
-}
-
 onMounted(() => {
     document.addEventListener("DOMContentLoaded", () => {
         renderMarkdownFile();
-        loadAppThemeFromLocalStorage();
-        setThemeClass();
+        store.loadAppThemeFromLocalStorage();
+
+        if (store.isLight) {
+            document.getElementById("app").classList.remove("dark");
+            document.getElementById("app").classList.add("light");
+        } else {
+            document.getElementById("app").classList.add("dark");
+            document.getElementById("app").classList.remove("light");
+        }
     });
 });
 </script>
