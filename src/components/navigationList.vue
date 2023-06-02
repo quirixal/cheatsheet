@@ -1,15 +1,6 @@
-<template lang="pug">
-nav.link-section-wrapper
-    .link-section(v-for="section in indexedDocsDirectory")
-        h4.link-section-title {{section.title}}
-        ul.link-section-links
-            li.link.pointer.text-ellipsis(v-for="link in section.links", @click="setPathInURL(link.path)") {{link.title}}
-</template>
-
 <script setup>
-// List with indexed docs directory, file will be automatically updated with a GitHub Action.
-import indexedDocsDirectory from "@/assets/json/indexed_docs_directory.json";
-// Defining emits
+import indexedDocsDirectory from "@/assets/json/indexed_docs_directory.json"; // Generated file with indexed docs dict
+
 const emit = defineEmits(["pathUpdated"]);
 
 function setPathInURL(path) {
@@ -17,6 +8,14 @@ function setPathInURL(path) {
     emit("pathUpdated");
 }
 </script>
+
+<template lang="pug">
+nav.link-section-wrapper
+    .link-section(v-for="subDirectory in indexedDocsDirectory")
+        h4.link-section-title {{subDirectory.title}}
+        ul.link-section-links
+            li.link.pointer.text-ellipsis(v-for="file in subDirectory.links", @click="setPathInURL(file.path)") {{file.title}}
+</template>
 
 <style lang="scss" scoped>
 .link-section-wrapper {

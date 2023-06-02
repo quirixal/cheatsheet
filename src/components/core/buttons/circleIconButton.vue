@@ -1,11 +1,11 @@
-<template lang="pug">
-button.circle-icon-button.flex.pointer(:title="tooltip")
-    span.material-symbols-outlined {{ icon }}
-</template>
-
 <script setup>
-defineProps(["icon", "tooltip", "iconSizeClass"]);
+const props = defineProps(["icon", "tooltip"]);
 </script>
+
+<template lang="pug">
+button.circle-icon-button.flex.pointer(:title="props.tooltip")
+    span.material-symbols-outlined {{ props.icon }}
+</template>
 
 <style lang="scss" scoped>
 button.circle-icon-button {

@@ -1,28 +1,12 @@
-<template lang="pug">
-navigation-drawer(@path-updated="renderMarkdownFile()", @update:appTheme="toggleTheme()")
-search-modal(@path-updated="renderMarkdownFile()")
-main(v-show="!store.getNavigationState")
-    #loader-wrapper
-        .loader
-        h1 Load new page, please wait.
-    #rendered-markdown-file
-</template>
-
 <script setup>
-import { markdown } from "./markdownit";
 import { onMounted, inject } from "vue";
-import { http } from "./axios.js";
-import ClipboardJs from "clipboard";
-
 import { useMainStore } from "./stores";
-
-// Components
+import ClipboardJs from "clipboard";
 import navigationDrawer from "./components/navigationDrawer.vue";
 import searchModal from "./components/searchModal.vue";
-import { trigger } from "@vue/reactivity";
 
-// Defining config & states
-const config = inject("config");
+const $http = inject("$http");
+const $markdown = inject("$markdown");
 const store = useMainStore();
 
 function addFragments(preRenderedMarkdownFile) {
@@ -112,20 +96,20 @@ function addAttributes(preRenderedMarkdownFile) {
         },
     ];
 
-    elementConfigList.forEach((config) => {
-        const elements = preRenderedMarkdownFile.querySelectorAll(config.elementTag);
-        if (config.elementTag === "h1" && elements.length === 1) {
+    elementConfigList.forEach((elementConfig) => {
+        const elements = preRenderedMarkdownFile.querySelectorAll(elementConfig.elementTag);
+        if (elementConfig.elementTag === "h1" && elements.length === 1) {
             elements[0].id = "site-title";
             const siteTitle = elements[0].innerText;
             document.title = siteTitle === "Cheat sheet" ? `${siteTitle} | Home` : `Cheat sheet | ${siteTitle}`;
-        } else if (config.elementTag === "h1" && elements.length === 0) {
+        } else if (elementConfig.elementTag === "h1" && elements.length === 0) {
             document.title = "Cheat sheet | Doc";
         } else {
             elements.forEach((element) => {
-                element.classList.add(config.class);
+                element.classList.add(elementConfig.class);
 
-                if (config.children) {
-                    config.children.forEach((child) => {
+                if (elementConfig.children) {
+                    elementConfig.children.forEach((child) => {
                         const childElements = element.querySelectorAll(child.elementTag);
                         childElements.forEach((childElement) => {
                             childElement.classList.add(child.class);
@@ -146,29 +130,22 @@ function addAttributes(preRenderedMarkdownFile) {
     return preRenderedMarkdownFile;
 }
 
-function addLoadingSpinner() {
-    document.getElementById("loader-wrapper").style.display = "flex";
-}
-
-function removeLoadingSpinner() {
-    document.getElementById("loader-wrapper").style.display = "none";
+function setLoadingSpinner(state) {
+    document.getElementById("loader-wrapper").style.display = state ? "flex" : "none";
 }
 
 // Render function
 async function renderMarkdownFile() {
-    addLoadingSpinner();
-
-    const md = markdown;
+    setLoadingSpinner(true);
     const urlQuery = window.location.search.replace("?path=", "");
 
     const path = urlQuery ? "/" + urlQuery : "/src/docs/index.md";
-    const rawMarkdownFile = (await http.get(path)).data;
+    const rawMarkdownFile = (await $http.get(path)).data;
     let preRenderedMarkdownFile = new DOMParser().parseFromString(
-        addCopyElementToPreElements(md.render(rawMarkdownFile)),
+        addCopyElementToPreElements($markdown.render(rawMarkdownFile)),
         "text/html"
     );
-    preRenderedMarkdownFile = addAttributes(preRenderedMarkdownFile);
-    preRenderedMarkdownFile = addFragments(preRenderedMarkdownFile);
+    preRenderedMarkdownFile = addFragments(addAttributes(preRenderedMarkdownFile));
 
     document.querySelector("main #rendered-markdown-file").innerHTML =
         preRenderedMarkdownFile.querySelector("body").innerHTML;
@@ -188,7 +165,7 @@ async function renderMarkdownFile() {
     clipboard.on("error", (e) => {
         console.log("copy error", e);
     });
-    removeLoadingSpinner();
+    setLoadingSpinner(false);
 }
 
 function addCopyElementToPreElements(content) {
@@ -225,6 +202,16 @@ onMounted(() => {
     });
 });
 </script>
+
+<template lang="pug">
+navigation-drawer(@path-updated="renderMarkdownFile()", @update:appTheme="toggleTheme")
+search-modal(@path-updated="renderMarkdownFile()")
+main(v-show="!store.getNavigationState")
+    #loader-wrapper
+        .loader
+        h1 Load new page, please wait.
+    #rendered-markdown-file
+</template>
 
 <style lang="scss" scoped>
 #rendered-markdown-file {
