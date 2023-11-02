@@ -1,151 +1,124 @@
-<template lang="pug">
-navigation-drawer(v-model:activeSearch="states.activeSearch", v-model:activeNavigation="states.activeNavigation", @path-updated="renderMarkdownFile()", @update:appTheme="toggleTheme()")
-search-modal(v-model:active="states.activeSearch", @close-navigation="closeNavigationAndResetSearchValue" @path-updated="renderMarkdownFile()")
-main#content(:class="{'no-scroll':states.activeNavigation}")
-</template>
-
-<script setup>
-import { markdown } from "./markdownit";
-import { onMounted, inject, reactive } from "vue";
-import { http } from "./axios.js";
-import ClipboardJs from "clipboard";
-
+<script setup lang="ts">
+import { onMounted, inject } from "vue";
+import { useTheme, type ThemeInstance } from "vuetify";
+// Utils
+import MarkdownRenderer from "./assets/scripts/MarkdownRenderer";
 // Components
-import navigationDrawer from "./components/navigationDrawer.vue";
-import searchModal from "./components/searchModal.vue";
-import { trigger } from "@vue/reactivity";
+import ApplicationBar from "./components/bars/ApplicationBar.vue";
+import NavigationBar from "./components/bars/NavigationBar.vue";
+import SearchOverlay from "./components/overlays/SearchOverlay.vue";
 
-// Defining config & states
-const config = inject("config");
-const states = reactive({
-    activeNavigation: false,
-    activeSearch: false,
-    lightMode: true,
-});
+const theme: ThemeInstance = useTheme();
+const $http: any = inject("http");
 
-// Render function
-async function renderMarkdownFile() {
-    const md = markdown;
-    const urlQuery = window.location.search.replace("?path=", "");
+async function renderFromPath() {
+  setLoadingSpinner(true, true);
+  // Get target element in DOM
+  const target: Element | null = document.getElementById("rendered-markdown");
 
-    const path = urlQuery ? "/" + urlQuery : "/src/docs/index.md";
-    const rawMarkdownFile = (await http.get(path)).data;
-    const preRenderedMarkdownFile = new DOMParser().parseFromString(
-        addCopyElementToPreElements(md.render(rawMarkdownFile)),
-        "text/html"
-    );
-    const siteTitleElement = preRenderedMarkdownFile.querySelector("h1");
-    const headlines = preRenderedMarkdownFile.querySelectorAll("h2");
-    const subHeadlines = preRenderedMarkdownFile.querySelectorAll("h3");
-    const paragraphs = preRenderedMarkdownFile.querySelectorAll("p");
-    const lists = preRenderedMarkdownFile.querySelectorAll("ul");
-    const codeBlocks = preRenderedMarkdownFile.querySelectorAll("pre");
-    const links = preRenderedMarkdownFile.querySelectorAll("a");
+  if (target) {
+    target.innerHTML = "";
+    // Get path from URL and construct axios request url
+    const path: string = window.location.search.replace("?path=", "");
+    const requestURL: string = path ? `/${path}` : "/src/docs/index.md";
 
-    if (siteTitleElement) {
-        siteTitleElement.id = "site-title";
-        const siteTitle = siteTitleElement.innerText;
-        document.title = siteTitle === "Cheat sheet" ? `${siteTitle} | Home` : `Cheat sheet | ${siteTitle}`;
-    } else document.title = "Cheat sheet | Doc";
-    if (headlines) {
-        headlines.forEach((headline) => {
-            headline.classList.add("headline");
-        });
-    }
-    if (subHeadlines) {
-        subHeadlines.forEach((subHeadline) => {
-            subHeadline.classList.add("sub-headline");
-        });
-    }
-    if (paragraphs) {
-        paragraphs.forEach((paragraph) => {
-            paragraph.classList.add("paragraph");
-            paragraph.querySelectorAll("code").forEach((code) => {
-                code.classList.add("inline-code");
-            });
-        });
-    }
-    if (lists) {
-        lists.forEach((list) => {
-            list.classList.add("list");
-            list.querySelectorAll("li").forEach((li) => {
-                li.classList.add("list-item");
-            });
-        });
-    }
-    if (codeBlocks) {
-        codeBlocks.forEach((codeBlock) => {
-            codeBlock.classList.add("code-block");
-        });
-    }
-    if (links) {
-        links.forEach((link) => {
-            link.classList.add("link");
-        });
-    }
+    // Fetch raw markdown file
+    const rawMarkdownFile: string = `${(await $http.get(requestURL)).data}`;
 
-    document.querySelector("main#content").innerHTML = preRenderedMarkdownFile.querySelector("body").innerHTML;
-
-    const clipboard = new ClipboardJs(".clipboard", {
-        text: (preIconElement) => {
-            return preIconElement.nextElementSibling.innerText;
-        },
-    });
-    clipboard.on("success", (e) => {
-        console.log("copy success", e);
-        e.trigger.innerText = "check";
-        setTimeout(() => {
-            e.trigger.innerText = "content_copy";
-        }, 1000);
-    });
-    clipboard.on("error", (e) => {
-        console.log("copy error", e);
-    });
+    // Render markdown file
+    const md: MarkdownRenderer = new MarkdownRenderer(rawMarkdownFile);
+    target.innerHTML = md.render();
+  }
+  setLoadingSpinner();
 }
 
-function addCopyElementToPreElements(content) {
-    return content.replaceAll(/\<pre\>/g, (value) => {
-        return `${value}<span class="clipboard  material-symbols-outlined">content_copy</span>`;
-    });
-}
+function setLoadingSpinner(state: boolean = false, newText: boolean = false) {
+  if (state || newText) {
+    const funnySentences = [
+      "Hold on tight, new page coming!",
+      "Abracadabra... and here's the new page!",
+      "The unicorns are working their magic, just a moment!",
+      "Time for the servers to have a coffee break...",
+      "Loading time? Not on our watch!",
+      "Drumroll, please... Ta-da, the fresh page is here!",
+      "Our pixel fairies are busy painting the new page!",
+      "Just a quick wait... almost there!",
+      "The hamsters are running at top speed... page loading!"
+    ];
 
-function closeNavigationAndResetSearchValue() {
-    states.activeNavigation = !states.activeNavigation;
-    states.searchValue = null;
-}
+    const target: Element | null = document.querySelector("#loading-spinner-wrapper h1");
+    if (target)
+      (target as HTMLElement).innerText =
+        funnySentences[Math.floor(Math.random() * funnySentences.length)];
+  }
 
-function toggleTheme(init = false) {
-    if (!init) {
-        states.lightMode = !states.lightMode;
-    }
-    if (states.lightMode) {
-        document.getElementById("app").classList.remove("dark");
-        document.getElementById("app").classList.add("light");
-    } else {
-        document.getElementById("app").classList.add("dark");
-        document.getElementById("app").classList.remove("light");
-    }
+  const target: Element | null = document.getElementById("loading-spinner-wrapper");
+  if (target) (target as HTMLElement).style.display = state ? "flex" : "none";
 }
 
 onMounted(() => {
-    document.addEventListener("DOMContentLoaded", () => {
-        renderMarkdownFile();
-        toggleTheme(true);
-    });
+  const storedTheme: string | null = localStorage.getItem("cheat_sheet_light_mode");
+  theme.global.name.value = storedTheme ? storedTheme : "dark";
+  renderFromPath();
 });
 </script>
 
-<style lang="scss" scoped>
-#content {
-    max-width: 900px;
-    min-height: 100vh;
-    margin: 0 auto;
-    padding: $app-padding;
-    padding-left: $navigation-drawer-width-inactive + $app-padding;
+<template lang="pug">
+v-app
+  //- Loading spinner
+  #loading-spinner-wrapper
+      .loading-spinner
+      h1
+  //- Overlays
+  SearchOverlay(@path-updated="renderFromPath")
+  //- Main Content
+  ApplicationBar(@path-updated="renderFromPath")
+  NavigationBar(@path-updated="renderFromPath")
+  v-main
+    v-container
+      #rendered-markdown
+</template>
 
-    &.no-scroll {
-        height: calc(100vh - $app-padding * 2);
-        overflow: hidden;
+<style lang="scss" scoped>
+#loading-spinner-wrapper {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #2b2b2b80;
+  height: calc(100vh - 56px);
+
+  .loading-spinner {
+    border: 16px solid #ffffff;
+    border-radius: 50%;
+    border-top: 16px solid #ff0000;
+    width: 120px;
+    height: 120px;
+    -webkit-animation: spin 2s linear infinite; /* Safari */
+    animation: spin 2s linear infinite;
+  }
+
+  h1 {
+    color: #ffffff;
+  }
+
+  /* Safari */
+  @-webkit-keyframes spin {
+    0% {
+      -webkit-transform: rotate(0deg);
     }
+    100% {
+      -webkit-transform: rotate(360deg);
+    }
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
 }
 </style>
