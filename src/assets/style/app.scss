@@ -1,75 +1,17 @@
 @import "variables";
-@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;500;600;700;800;900;1000&family=Roboto+Mono&display=swap");
+@import "markdown-styles.scss";
+// Fonts
 @import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined");
 
+// General
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
-body {
-    margin: 0;
-    font-family: "Nunito", sans-serif;
-}
-
-// Typography
-#content {
-    h1 {
-        &:after {
-            content: "";
-            display: block;
-            height: $app-border-width;
-            background-color: #000;
-        }
-    }
-
-    pre {
-        border-radius: $app-border-radius;
-        padding: $app-padding;
-        background-color: #cccccc;
-        code {
-            font-size: 12px;
-            font-family: "Roboto Mono", monospace;
-        }
-    }
-}
-
-// Helpers
-.flex {
-    display: flex;
-
-    &.column {
-        flex-direction: column;
-    }
-
-    .flex-filler {
-        flex: 1;
-    }
+.flex-filler {
+  flex: 1;
 }
 
 .pointer {
-    cursor: pointer;
-}
-
-// Code blocks
-pre {
-    position: relative;
-
-    .material-symbols-outlined {
-        display: none;
-        position: absolute;
-        top: 4px;
-        right: 4px;
-        cursor: pointer;
-    }
-
-    &:hover {
-        .material-symbols-outlined {
-            display: block;
-        }
-    }
-}
-hr.divider {
-    border: none;
-    height: 1px;
-    background-color: $primary-color;
+  cursor: pointer;
 }
